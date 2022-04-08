@@ -1,3 +1,7 @@
 body {
-    background-color: ghostwhite;
+    background-color: rgb(208, 208, 224);
+}
+
+.someClass {
+    text-align: center;
 }
