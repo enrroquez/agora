@@ -7,7 +7,7 @@ fetch("/user/id.json")
         console.log("data.userId:", data.userId);
         if (!data.userId) {
             // this means the user does not have the right cookie, and should
-            // see registration,( login or pw reset)
+            // see registration, login or pw reset
             ReactDOM.render(<Welcome />, document.querySelector("main"));
         } else {
             // this means the user is logged in cause their browser DID have a cookie

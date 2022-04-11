@@ -24,7 +24,7 @@ export default class Login extends Component {
     }
 
     handleSubmit(e) {
-        // console.log("user wants to send over data to the server & register");
+        console.log("user wants to send over data to the server & login");
         e.preventDefault();
         console.log(
             "Ready to fetch. Data the user provided (this.state)",
@@ -41,7 +41,9 @@ export default class Login extends Component {
             .then((resp) => {
                 console.log("Server response from POST /login.json", resp);
                 if (!resp.success) {
-                    this.setState({ error: "Some error in login" });
+                    this.setState({
+                        error: "There was an error, please try again.",
+                    });
                 } else {
                     location.reload();
                 }
@@ -58,9 +60,11 @@ export default class Login extends Component {
             <section>
                 <h3 className="someClass">
                     <em>
-                        Please login
+                        Please login,
                         <br />
-                        <Link to="/">or register first</Link>
+                        <Link to="/">register first,</Link>
+                        <br />
+                        <Link to="/reset">or reset your password</Link>
                     </em>
                 </h3>
                 {this.state.error && <h2>{this.state.error}</h2>}
@@ -81,7 +85,7 @@ export default class Login extends Component {
                             onChange={this.handleChange}
                         />
                     </p>
-                    <button onClick={this.handleSubmit}>Register</button>
+                    <button onClick={this.handleSubmit}>Login</button>
                 </form>
             </section>
         );

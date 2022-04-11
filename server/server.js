@@ -5,6 +5,7 @@ const path = require("path");
 const bcrypt = require("bcryptjs");
 const db = require("./db");
 const cookieSession = require("cookie-session");
+const cryptoRandomString = require("crypto-random-string");
 
 app.use(compression());
 
@@ -37,6 +38,34 @@ app.use(express.json());
 
 ///incorporar ses.js
 
+app.post("/reset.json", (req, res) => {
+    const { email } = req.body;
+    console.log("email: ", email);
+
+    // Confirm that there is a user with the submitted email address
+    db.getUserByEmail(email)
+        .then(({ rows }) => {
+            console.log("User with that email has Id: ", rows[0].id);
+
+            // Generate a secret code and store it so it can be retrieved later
+            // const secretCode = cryptoRandomString({ length: 6 });<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+
+            // Put the secret code into an email message and send it to the user
+
+            res.json({ success: true });
+        })
+        .catch((err) => {
+            console.log(
+                "(reset) User does not exist in our DB, error: ",
+                err.message
+            );
+            console.log("notifying the component...");
+            res.json({ success: false });
+        });
+
+    // res.json({ success: true });
+});
+
 app.post("/register.json", (req, res) => {
     console.log("req.body when calling post to register.json: ", req.body);
     const { first, last, email, password } = req.body;
@@ -54,8 +83,8 @@ app.post("/register.json", (req, res) => {
                 });
         })
         .catch((err) => {
-            res.json({ success: false });
             console.log("Some error hashing the password: ", err.message);
+            res.json({ success: false });
         });
 });
 
@@ -76,7 +105,9 @@ app.post("/login.json", (req, res) => {
                         // res.json({userId: req.session.userId});
                         res.json({ success: true });
                     } else {
-                        console.log("comparison did not matched!");
+                        console.log(
+                            "Hashed passwords comparison did not matched!"
+                        );
                         res.json({ success: false });
                     }
                 })
@@ -85,7 +116,11 @@ app.post("/login.json", (req, res) => {
                 });
         })
         .catch((err) => {
-            console.log("User does not exist in our DB, error: ", err.message);
+            res.json({ success: false });
+            console.log(
+                "(login) User does not exist in our DB, error: ",
+                err.message
+            );
         });
 });
 

@@ -69,9 +69,11 @@ export default class Registration extends Component {
             <section>
                 <h3 className="someClass">
                     <em>
-                        Please register
+                        Please register,
                         <br />
-                        <Link to="/login">or login</Link>
+                        <Link to="/login">login</Link>
+                        <br />
+                        <Link to="/reset">or reset your password</Link>
                     </em>
                 </h3>
                 {this.state.error && <h2>{this.state.error}</h2>}
