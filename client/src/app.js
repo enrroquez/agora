@@ -1,11 +1,19 @@
 import React from "react";
 
+
+import Profile from "./profile";
+
+
 export default class App extends React.Component{
     constructor(props){
         super(props);
             super(props);
             this.state={
-                uploaderIsVisible:false // it can be removed, because the first time it is used
+
+            first:"Andrea", //this are hard-coded now, but should come from DB
+            last:"Arias",
+
+                uploaderIsVisible:false, // it can be removed, because the first time it is used
             };
         }
 
@@ -25,6 +33,19 @@ export default class App extends React.Component{
             }
             return(
                 <>
+
+                <Profile //example related to profile.js
+                first={this.state.first}
+                last={this.state.last}
+                image={this.state.imageUrl}
+                />
+
+                <ProfilePic 
+                first={this.state.first}
+                imageUrl={this.state.imageUrl}
+                />
+
+
                 <img src="/logo.gif" alt="logo"/>
                 clickHandler={()=> this.state({ //in some docs recommend no to run a function inside render() for performance concerns
                     uploaderIsVisible: true

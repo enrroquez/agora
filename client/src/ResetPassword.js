@@ -8,13 +8,13 @@ export default class ResetPassword extends Component {
         this.state = {
             error: "",
         };
+
         this.handleChange = this.handleChange.bind(this);
         this.handleSubmit = this.handleSubmit.bind(this);
     }
     componentDidMount() {
         console.log("ResetPassword just mounted");
     }
-
     handleChange(evt) {
         this.setState(
             {
@@ -23,7 +23,6 @@ export default class ResetPassword extends Component {
             () => console.log("registration state updated", this.state)
         );
     }
-
     handleSubmit() {
         console.log(
             "user wants to send over data to the server & reset password"
@@ -32,7 +31,7 @@ export default class ResetPassword extends Component {
             "Ready to fetch. Data the user provided (this.state)",
             this.state
         );
-        fetch("/reset.json", {
+        fetch("/reset-1st.json", {
             method: "POST",
             headers: {
                 "Content-Type": "application/json",

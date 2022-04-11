@@ -8,6 +8,22 @@ exports.addUser = (first, last, email, hashpass) => {
         [first, last, email, hashpass]
     );
 };
+
 exports.getUserByEmail = (email) => {
     return db.query("SELECT * FROM users WHERE email=$1", [email]);
+};
+
+exports.getCurrentResetCodesByEmail = (email) => {
+    return db.query(
+        "SELECT * FROM reset_codes WHERE email=$1 AND CURRENT_TIMESTAMP - timestamp < INTERVAL '10 minutes'",
+        [email]
+    );
+};
+
+exports.addSecretCode = (email, secretCode) => {
+    return db.query(
+        `INSERT INTO reset_codes (email, code)
+            VALUES ($1, $2) RETURNING id`,
+        [email, secretCode]
+    );
 };

@@ -6,6 +6,7 @@ const bcrypt = require("bcryptjs");
 const db = require("./db");
 const cookieSession = require("cookie-session");
 const cryptoRandomString = require("crypto-random-string");
+const ses = require("./ses");
 
 app.use(compression());
 
@@ -36,23 +37,28 @@ function compare(password, hash) {
 
 app.use(express.json());
 
-///incorporar ses.js
-
-app.post("/reset.json", (req, res) => {
+app.post("/reset-1st.json", (req, res) => {
     const { email } = req.body;
-    console.log("email: ", email);
-
-    // Confirm that there is a user with the submitted email address
     db.getUserByEmail(email)
         .then(({ rows }) => {
             console.log("User with that email has Id: ", rows[0].id);
-
-            // Generate a secret code and store it so it can be retrieved later
-            // const secretCode = cryptoRandomString({ length: 6 });<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
-
-            // Put the secret code into an email message and send it to the user
-
-            res.json({ success: true });
+            const secretCode = cryptoRandomString({ length: 6 });
+            db.addSecretCode(email, secretCode)
+                .then(() => {
+                    const recipient = email;
+                    ses.sendEmail(recipient, secretCode, "Reset Code")
+                        .then(() => {
+                            res.json({ success: true });
+                        })
+                        .catch((err) => {
+                            console.log("error sending email: ", err.message);
+                            res.json({ success: false });
+                        });
+                })
+                .catch((err) => {
+                    console.log("error sending email: ", err.message);
+                    res.json({ success: false });
+                });
         })
         .catch((err) => {
             console.log(
@@ -62,8 +68,6 @@ app.post("/reset.json", (req, res) => {
             console.log("notifying the component...");
             res.json({ success: false });
         });
-
-    // res.json({ success: true });
 });
 
 app.post("/register.json", (req, res) => {
@@ -122,6 +126,11 @@ app.post("/login.json", (req, res) => {
                 err.message
             );
         });
+});
+
+app.get("/logout", function (req, res) {
+    req.session = null;
+    res.redirect("/");
 });
 
 // this is the route we added in the encounter
