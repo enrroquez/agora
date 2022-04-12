@@ -45,7 +45,7 @@ export default class ResetPassword extends Component {
                 console.log("Server response for POST: ", resp);
                 if (!resp.success) {
                     this.setState({
-                        error: "Some error we want to hide.",
+                        error: "Some error message/behavor we want to change!.",
                     });
                 } else {
                     this.setState({ step: 2 });
@@ -99,6 +99,7 @@ export default class ResetPassword extends Component {
                     {this.state.error && <h2>{this.state.error}</h2>}
                     <p>
                         <input
+                            key="1"
                             name="email"
                             placeholder="Email"
                             type="email"
@@ -117,18 +118,21 @@ export default class ResetPassword extends Component {
                             If that was a valid email, we have sent an email
                             message with the reset code.
                             <br />
-                            Please introduce it here, along with your email.
+                            Please introduce it here, along with your new
+                            password.
                         </em>
                     </h3>
                     {this.state.error && <h2>{this.state.error}</h2>}
                     <p>
                         <input
+                            key="2"
                             name="resetCode"
                             placeholder="Reset code"
                             type="text"
                             onChange={this.handleChange}
                         />
                         <input
+                            key="3"
                             name="password"
                             placeholder="New password"
                             type="password"
