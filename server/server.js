@@ -37,7 +37,36 @@ function compare(password, hash) {
 
 app.use(express.json());
 
-app.post("/reset-1st.json", (req, res) => {
+app.post("/password/reset/verify.json", (req, res) => {
+    console.log("req.body: ", req.body);
+    const { email, resetCode, password } = req.body;
+    db.getCurrentResetCodesByEmail(email).then(({ rows }) => {
+        console.log("Infos from that user: ", rows[0]);
+        if (rows[0].code == resetCode) {
+            hashPass(password)
+                .then((hash) => {
+                    console.log("hass:", hash);
+                    db.updatePasswordByEmail(email, hash)
+                        .then(() => {
+                            res.json({ success: true });
+                        })
+                        .catch((err) => {
+                            console.log("Error: ", err.message);
+                            res.json({ success: false });
+                        });
+                })
+                .catch((err) => {
+                    console.log(
+                        "Some error hashing the password: ",
+                        err.message
+                    );
+                    res.json({ success: false });
+                });
+        }
+    });
+});
+
+app.post("/password/reset/start.json", (req, res) => {
     const { email } = req.body;
     db.getUserByEmail(email)
         .then(({ rows }) => {

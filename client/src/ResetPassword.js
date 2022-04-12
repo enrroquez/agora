@@ -7,10 +7,11 @@ export default class ResetPassword extends Component {
         super();
         this.state = {
             error: "",
+            step: 1,
         };
-
         this.handleChange = this.handleChange.bind(this);
         this.handleSubmit = this.handleSubmit.bind(this);
+        this.handleCode = this.handleCode.bind(this);
     }
     componentDidMount() {
         console.log("ResetPassword just mounted");
@@ -23,6 +24,7 @@ export default class ResetPassword extends Component {
             () => console.log("registration state updated", this.state)
         );
     }
+
     handleSubmit() {
         console.log(
             "user wants to send over data to the server & reset password"
@@ -31,7 +33,7 @@ export default class ResetPassword extends Component {
             "Ready to fetch. Data the user provided (this.state)",
             this.state
         );
-        fetch("/reset-1st.json", {
+        fetch("/password/reset/start.json", {
             method: "POST",
             headers: {
                 "Content-Type": "application/json",
@@ -40,49 +42,116 @@ export default class ResetPassword extends Component {
         })
             .then((resp) => resp.json())
             .then((resp) => {
-                console.log("Server response from POST /reset.json", resp);
+                console.log("Server response for POST: ", resp);
                 if (!resp.success) {
                     this.setState({
-                        error: "If that was a valid email, we have sent an email message with the reset code.",
+                        error: "Some error we want to hide.",
                     });
-                    // there was success:false in route POST login.json what should we do?
                 } else {
-                    // there was success:true in route POST login.json the user's email was found in DB
-                    console.log("success:true");
+                    this.setState({ step: 2 });
                     // location.reload();
                 }
             })
             .catch((err) => {
                 console.log("Error on fetch reset.json", err);
-                // make sure to set our error state in the component's state <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<PEND?
+            });
+    }
+
+    handleCode() {
+        fetch("/password/reset/verify.json", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+            },
+            body: JSON.stringify(this.state),
+        })
+            .then((resp) => resp.json())
+            .then((resp) => {
+                console.log("Server response for POST: ", resp);
+                if (!resp.success) {
+                    this.setState({
+                        error: "There was an error updating your password",
+                    });
+                } else {
+                    this.setState({ step: 3 });
+                    // location.reload();
+                }
+            })
+            .catch((err) => {
+                console.log("Error on fetch reset.json", err);
             });
     }
 
     render() {
         console.log(this.state);
         console.log(this.state.error);
-        return (
-            <section>
-                <h3 className="someClass">
-                    <em>
-                        Reset Password,
-                        <br />
-                        please make sure to enter the email you registered.
-                        <br />
-                        <Link to="/login">or go to login</Link>
-                    </em>
-                </h3>
-                {this.state.error && <h2>{this.state.error}</h2>}
-                <p>
-                    <input
-                        name="email"
-                        placeholder="Email"
-                        type="email"
-                        onChange={this.handleChange}
-                    />
-                </p>
-                <button onClick={this.handleSubmit}>Reset</button>
-            </section>
-        );
+        if (this.state.step == 1) {
+            return (
+                <section className="someClass">
+                    <h2>Reset Password</h2>
+                    <h3>
+                        <em>
+                            Please make sure to enter the email you registered
+                            <br />
+                            <Link to="/login">or go to login</Link>
+                        </em>
+                    </h3>
+                    {this.state.error && <h2>{this.state.error}</h2>}
+                    <p>
+                        <input
+                            name="email"
+                            placeholder="Email"
+                            type="email"
+                            onChange={this.handleChange}
+                        />
+                    </p>
+                    <button onClick={this.handleSubmit}>Submit</button>
+                </section>
+            );
+        } else if (this.state.step == 2) {
+            return (
+                <section className="someClass">
+                    <h2>Reset Password</h2>
+                    <h3>
+                        <em>
+                            If that was a valid email, we have sent an email
+                            message with the reset code.
+                            <br />
+                            Please introduce it here, along with your email.
+                        </em>
+                    </h3>
+                    {this.state.error && <h2>{this.state.error}</h2>}
+                    <p>
+                        <input
+                            name="resetCode"
+                            placeholder="Reset code"
+                            type="text"
+                            onChange={this.handleChange}
+                        />
+                        <input
+                            name="password"
+                            placeholder="New password"
+                            type="password"
+                            onChange={this.handleChange}
+                        />
+                    </p>
+                    <button onClick={this.handleCode}>Reset</button>
+                </section>
+            );
+        } else if (this.state.step == 3) {
+            return (
+                <section className="someClass">
+                    <h2>Reset Password</h2>
+                    <h3>
+                        <em>
+                            Password has been renewed.
+                            <br />
+                            <Link to="/login">Go to login</Link>
+                        </em>
+                        {this.state.error && <h2>{this.state.error}</h2>}
+                    </h3>
+                </section>
+            );
+        }
     }
 }

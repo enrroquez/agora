@@ -27,3 +27,10 @@ exports.addSecretCode = (email, secretCode) => {
         [email, secretCode]
     );
 };
+
+exports.updatePasswordByEmail = (email, hashpass) => {
+    return db.query(`UPDATE users SET hashpass = $2 WHERE email = $1`, [
+        email,
+        hashpass,
+    ]);
+};
