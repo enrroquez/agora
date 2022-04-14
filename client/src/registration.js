@@ -66,8 +66,8 @@ export default class Registration extends Component {
         console.log(this.state);
         console.log(this.state.error);
         return (
-            <section>
-                <h3 className="someClass">
+            <section className="someClass">
+                <h3>
                     <em>
                         Please register,
                         <br />

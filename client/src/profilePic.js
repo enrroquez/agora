@@ -3,11 +3,14 @@ export default function profilePic(props) {
     console.log("props: ", props);
     return (
         <>
-            <img
-                src={props.imageUrl || "/agora.jpg"}
-                alt={`${props.first} ${props.last}`}
-                onClick={props.showUploader}
-            />
+            <div className="someClass">
+                <img
+                    src={props.imageUrl || "/anon.jpg"}
+                    height={"200vh"}
+                    alt={`${props.first} ${props.last}`}
+                    onClick={props.showUploader}
+                />
+            </div>
         </>
     );
 }

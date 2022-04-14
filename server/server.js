@@ -37,6 +37,16 @@ function compare(password, hash) {
 
 app.use(express.json());
 
+app.get("/user.json", (req, res) => {
+    db.getUserInfo(req.session.userId)
+        .then(({ rows }) => {
+            res.json(rows[0]);
+        })
+        .catch((err) => {
+            console.log("Some error getting user info", err);
+        });
+});
+
 app.post("/password/reset/verify.json", (req, res) => {
     console.log("req.body: ", req.body);
     const { email, resetCode, password } = req.body;

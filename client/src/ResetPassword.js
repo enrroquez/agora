@@ -88,10 +88,11 @@ export default class ResetPassword extends Component {
         if (this.state.step == 1) {
             return (
                 <section className="someClass">
-                    <h2>Reset Password</h2>
-                    <h3>
+                    <h3 className="someClass">
                         <em>
-                            Please make sure to enter the email you registered
+                            Reset Password,
+                            <br />
+                            please make sure to enter the email you registered
                             <br />
                             <Link to="/login">or go to login</Link>
                         </em>
@@ -112,11 +113,11 @@ export default class ResetPassword extends Component {
         } else if (this.state.step == 2) {
             return (
                 <section className="someClass">
-                    <h2>Reset Password</h2>
                     <h3>
+                        Reset Password
+                        <br />
                         <em>
-                            If that was a valid email, we have sent an email
-                            message with the reset code.
+                            We have sent an email message with the reset code.
                             <br />
                             Please introduce it here, along with your new
                             password.

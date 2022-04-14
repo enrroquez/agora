@@ -1,6 +1,13 @@
 const spicedPg = require("spiced-pg");
 const db = spicedPg(`postgres:postgres:postgres@localhost:5432/social_db`);
 
+exports.getUserInfo = (userId) => {
+    return db.query(
+        `SELECT id, first, last, email, created_at FROM users WHERE id=$1`,
+        [userId]
+    );
+};
+
 exports.addUser = (first, last, email, hashpass) => {
     return db.query(
         `INSERT INTO users (first, last, email, hashpass)

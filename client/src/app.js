@@ -1,67 +1,59 @@
 import React from "react";
+import ProfilePic from "./profilePic";
+// import Uploader from "./uploader";
 
+export default class App extends React.Component {
+    constructor() {
+        super();
+        this.state = {};
+        this.showUploader = this.showUploader.bind(this);
+        this.hideUploader = this.hideUploader.bind(this);
+    }
 
-import Profile from "./profile";
+    componentDidMount() {
+        fetch("/user.json")
+            .then((res) => res.json())
+            .then((data) => {
+                console.log("data: ", data);
+                //first name, last name, etc.
+                this.setState(data);
+            });
+    }
 
+    showUploader() {
+        this.setState({
+            uploaderIsVisible: true,
+        });
+    }
 
-export default class App extends React.Component{
-    constructor(props){
-        super(props);
-            super(props);
-            this.state={
+    hideUploader() {
+        this.setState({
+            uploaderIsVisible: false,
+        });
+    }
 
-            first:"Andrea", //this are hard-coded now, but should come from DB
-            last:"Arias",
-
-                uploaderIsVisible:false, // it can be removed, because the first time it is used
-            };
+    render() {
+        //whenever state changes render runs again
+        if (!this.state.id) {
+            return <img src="/spinner.gif" alt="Loading..." height="200vh" />;
         }
-
-        componentDidMount(){
-            fetch('/user').then(
-                res=>res.json()
-            ).then(
-                data=>{ //first name, last name, etc.
-                    this.setState(data)
+        return (
+            <>
+                {
+                    <div className="someClass">
+                        <img src="./agora.jpg" alt="logo" height="200vh" />
+                    </div>
                 }
-            );
-        }
-
-        render(){//when ever state changes render runs again
-            if(!this.state.id){
-                return <img src="spinner.gif" alt="Loading..." />
-            }
-            return(
-                <>
-
-                <Profile //example related to profile.js
-                first={this.state.first}
-                last={this.state.last}
-                image={this.state.imageUrl}
-                />
-
-                <ProfilePic 
-                first={this.state.first}
-                imageUrl={this.state.imageUrl}
-                />
-
-
-                <img src="/logo.gif" alt="logo"/>
-                clickHandler={()=> this.state({ //in some docs recommend no to run a function inside render() for performance concerns
-                    uploaderIsVisible: true
-                    //img
-                })}
-                <ProfilePic 
+                <ProfilePic
                     imageUrl={this.state.imageUrl}
-                    clickHandler={()=> this.setState({
-                        uploaderIsVisible:true
-                    })}
+                    first={this.state.first}
+                    last={this.state.last}
+                    showUploader={this.showUploader}
                 />
-
-                {this.state.uploaderIsVisible && <Uploader />}
-
-                </>
-            )
-        }
+                {this.state.uploaderIsVisible && (
+                    <Uploader hideUploader={this.hideUploader} />
+                )}
+            </>
+        );
     }
 }

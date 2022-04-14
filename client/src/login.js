@@ -57,8 +57,8 @@ export default class Login extends Component {
     render() {
         console.log("this.state before rendering: ", this.state);
         return (
-            <section>
-                <h3 className="someClass">
+            <section className="someClass">
+                <h3>
                     <em>
                         Please login,
                         <br />
