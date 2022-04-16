@@ -15,22 +15,41 @@ export default class uploader extends React.Component {
         super(props);
         console.log("props in uploader.js: ", props);
         this.state = {};
+        console.log("this.state: ", this.state);
     }
 
-    fileSelectHandler() {
-        console.log("user is selecting an image file!");
+    fileSelectHandler(e) {
+        this.file = e.target.files[0];
+        console.log("this.file: ", this.file);
     }
 
-    clickHandler() {
-        console.log("user just submitted");
+    clickHandler(e) {
+        e.preventDefault();
+        console.log("user just submitted, got parameter e: ", e);
+        console.log("this.file: ", this.file);
+        const fd = new FormData();
+        fd.append("file", this.file);
+        fetch("/upload", {
+            method: "POST",
+            body: fd,
+        })
+            .then((res) => res.json())
+            .then((response) => {
+                console.log("response when upload: ", response);
+            })
+            .catch((err) => {
+                console.log("err submitting new profilepic", err);
+            });
     }
 
     render() {
-        console.log("we are rendering something in uploader");
+        console.log("we are rendering the form in the uploader component");
         return (
             <>
+                <br />
                 <div className="someClass">
-                    <div>Add an image now!</div>
+                    <div>or add your image to the profile now!</div>
+                    <br />
                     <form>
                         <input
                             onChange={this.fileSelectHandler}
