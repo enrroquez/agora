@@ -1,6 +1,6 @@
 import React from "react";
 import ProfilePic from "./profilePic";
-// import Uploader from "./uploader";
+import Uploader from "./Uploader";
 
 export default class App extends React.Component {
     constructor() {
@@ -32,6 +32,14 @@ export default class App extends React.Component {
         });
     }
 
+    // To Uploader the App component must pass a function that gets passed an image url and puts it in App's state. Uploader can call this function after it uploads a new image.
+
+    providesImageUrlToState(imageUrl) {
+        this.setState({
+            imageUrl: imageUrl,
+        });
+    }
+
     render() {
         //whenever state changes render runs again
         if (!this.state.id) {
@@ -42,6 +50,9 @@ export default class App extends React.Component {
                 {
                     <div className="someClass">
                         <img src="./agora.jpg" alt="logo" height="200vh" />
+                        <h2>
+                            Agora: <em>the public sphere</em>
+                        </h2>
                     </div>
                 }
                 <ProfilePic

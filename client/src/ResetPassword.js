@@ -45,7 +45,7 @@ export default class ResetPassword extends Component {
                 console.log("Server response for POST: ", resp);
                 if (!resp.success) {
                     this.setState({
-                        error: "Some error message/behavor we want to change!.",
+                        error: "Something went wrong!",
                     });
                 } else {
                     this.setState({ step: 2 });
@@ -140,6 +140,9 @@ export default class ResetPassword extends Component {
                             onChange={this.handleChange}
                         />
                     </p>
+                    {/* {
+                        setTimeout(() => {this.setState({ error: "" })}, 5000)
+                    } */}
                     <button onClick={this.handleCode}>Reset</button>
                 </section>
             );

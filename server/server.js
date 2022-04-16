@@ -8,6 +8,28 @@ const cookieSession = require("cookie-session");
 const cryptoRandomString = require("crypto-random-string");
 const ses = require("./ses");
 
+///////////////////////////////////////////
+// const multer = require("multer");
+// const uidSafe = require("uid-safe");
+// const path = require("path");
+// const diskStorage = multer.diskStorage({
+//     destination: function (req, file, callback) {
+//         callback(null, path.join(__dirname, "uploads"));
+//     },
+//     filename: function (req, file, callback) {
+//         uidSafe(24).then(function (uid) {
+//             callback(null, uid + path.extname(file.originalname));
+//         });
+//     },
+// });
+// const uploader = multer({
+//     storage: diskStorage,
+//     limits: {
+//         fileSize: 2097152,
+//     },
+// });
+//////////////////////////////////////////
+
 app.use(compression());
 
 let sessionSecret = require("../secrets.json").SESSION_SECRET;
@@ -50,30 +72,37 @@ app.get("/user.json", (req, res) => {
 app.post("/password/reset/verify.json", (req, res) => {
     console.log("req.body: ", req.body);
     const { email, resetCode, password } = req.body;
-    db.getCurrentResetCodesByEmail(email).then(({ rows }) => {
-        console.log("Infos from that user: ", rows[0]);
-        if (rows[0].code == resetCode) {
-            hashPass(password)
-                .then((hash) => {
-                    console.log("hass:", hash);
-                    db.updatePasswordByEmail(email, hash)
-                        .then(() => {
-                            res.json({ success: true });
-                        })
-                        .catch((err) => {
-                            console.log("Error: ", err.message);
-                            res.json({ success: false });
-                        });
-                })
-                .catch((err) => {
-                    console.log(
-                        "Some error hashing the password: ",
-                        err.message
-                    );
-                    res.json({ success: false });
-                });
-        }
-    });
+    db.getCurrentResetCodesByEmail(email)
+        .then(({ rows }) => {
+            console.log("Infos from that user: ", rows[0]);
+            if (rows[0].code == resetCode) {
+                hashPass(password)
+                    .then((hash) => {
+                        console.log("hass:", hash);
+                        db.updatePasswordByEmail(email, hash)
+                            .then(() => {
+                                res.json({ success: true });
+                            })
+                            .catch((err) => {
+                                console.log("Error: ", err.message);
+                                res.json({ success: false });
+                            });
+                    })
+                    .catch((err) => {
+                        console.log(
+                            "Some error hashing the password: ",
+                            err.message
+                        );
+                        res.json({ success: false });
+                    });
+            }
+        })
+        .catch((err) => {
+            console.log(
+                "Some error getting the resetCode from DB: ",
+                err.message
+            );
+        });
 });
 
 app.post("/password/reset/start.json", (req, res) => {
@@ -167,7 +196,7 @@ app.post("/login.json", (req, res) => {
         });
 });
 
-app.get("/logout", function (req, res) {
+app.get("/logout.json", function (req, res) {
     req.session = null;
     res.redirect("/");
 });

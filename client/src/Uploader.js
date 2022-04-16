@@ -1,0 +1,86 @@
+// Image Upload
+
+// Let's add a third component, also a child of App, that is only visible after the user clicks on the profile pic.
+
+// Munity image upload
+
+// This Uploader component should display as a modal. Whether or not it is displayed should be determined by a property (called, for example, uploaderIsVisible) of the state of the App component. ProfilePic should be passed a function from App for setting this property to true.
+
+// The Uploader component should be passed a function for setting the profilePicUrl of the App component's state. After a successful upload, it should call this function and pass to it the url of the image that was just uploaded (your POST route on the server will have to include this url in the response it sends). This should cause ProfilePic to automatically switch to the new image. The function for setting profilePicUrl should also set uploaderIsVisible to false.
+
+// const s3 = require("multer");
+// const uidSafe = require("uid-safe");
+// const path = require("path");
+
+export default function uploader(props) {
+    console.log("we are in uploader");
+    console.log("props: ", props);
+
+    // render () {
+    //     return(
+    //         <>
+    //             <div class="someClass">
+    //                 <div>Add an image now!</div>
+    //                 <form>
+    //                     <input @change="fileSelectHandler" type="file" name="file" accept="image/*" />
+    //                     <button @click.prevent="clickHandler">Submit</button>
+    //                 </form>
+    //             </div>
+    //         </>
+    //     )
+    // }
+}
+
+// When the change event happens on that input field it should create a FormData and do a POST request
+// When the promise from the fetch call is resolved, then Uploader knows the new image url. It needs to pass the new image url to a function that App created and passed to Uploader so that App can put the new url in its state
+
+// const aws = require("aws-sdk");
+// const fs = require("fs");
+
+// let secrets;
+// if (process.env.NODE_ENV == "production") {
+//     secrets = process.env; // in prod the secrets are environment variables
+// } else {
+//     secrets = require("./secrets"); // in dev they are in secrets.json which is listed in .gitignore
+// }
+
+// const s3 = new aws.S3({
+//     accessKeyId: secrets.AWS_KEY,
+//     secretAccessKey: secrets.AWS_SECRET,
+// });
+
+// exports.upload = (req, res, next) => {
+//     //why do we use export?
+//     // if there is no file! send an error message!
+//     if (!req.file) {
+//         return res.sendStatus(500);
+//     }
+
+//     // we only want to talk to s3 IF we have a file!
+//     // console.log("file: ", req.file);
+//     const { filename, mimetype, size, path } = req.file;
+
+//     const promise = s3
+//         .putObject({
+//             Bucket: "spicedling",
+//             ACL: "public-read",
+//             Key: filename,
+//             Body: fs.createReadStream(path),
+//             ContentType: mimetype,
+//             ContentLength: size,
+//         })
+//         .promise();
+
+//     promise
+//         .then(() => {
+//             // it worked!!!
+//             console.log("aws upload worked!");
+//             fs.unlink(path, () => {});
+//             next();
+//         })
+//         .catch((err) => {
+//             // uh oh
+//             console.log("err in s3 upload: ", err);
+//             res.sendStatus(404);
+//         });
+// };

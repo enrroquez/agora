@@ -10,9 +10,9 @@ export default function Welcome() {
                 <div className="someClass">
                     <img src="./agora.jpg" alt="logo" height="200vh" />
                     <h1>Welcome to Agora</h1>
-                    {/* <h2>
-                    <em>The argumentation community</em>
-                </h2> */}
+                    <h2>
+                        <em>The public sphere</em>
+                    </h2>
                 </div>
             }
             <BrowserRouter>
