@@ -8,27 +8,42 @@
 
 // The Uploader component should be passed a function for setting the profilePicUrl of the App component's state. After a successful upload, it should call this function and pass to it the url of the image that was just uploaded (your POST route on the server will have to include this url in the response it sends). This should cause ProfilePic to automatically switch to the new image. The function for setting profilePicUrl should also set uploaderIsVisible to false.
 
-// const s3 = require("multer");
-// const uidSafe = require("uid-safe");
-// const path = require("path");
+import React from "react";
 
-export default function uploader(props) {
-    console.log("we are in uploader");
-    console.log("props: ", props);
+export default class uploader extends React.Component {
+    constructor(props) {
+        super(props);
+        console.log("props in uploader.js: ", props);
+        this.state = {};
+    }
 
-    // render () {
-    //     return(
-    //         <>
-    //             <div class="someClass">
-    //                 <div>Add an image now!</div>
-    //                 <form>
-    //                     <input @change="fileSelectHandler" type="file" name="file" accept="image/*" />
-    //                     <button @click.prevent="clickHandler">Submit</button>
-    //                 </form>
-    //             </div>
-    //         </>
-    //     )
-    // }
+    fileSelectHandler() {
+        console.log("user is selecting an image file!");
+    }
+
+    clickHandler() {
+        console.log("user just submitted");
+    }
+
+    render() {
+        console.log("we are rendering something in uploader");
+        return (
+            <>
+                <div className="someClass">
+                    <div>Add an image now!</div>
+                    <form>
+                        <input
+                            onChange={this.fileSelectHandler}
+                            type="file"
+                            name="file"
+                            accept="image/*"
+                        />
+                        <button onClick={this.clickHandler}>Submit</button>
+                    </form>
+                </div>
+            </>
+        );
+    }
 }
 
 // When the change event happens on that input field it should create a FormData and do a POST request
