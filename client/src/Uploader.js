@@ -13,20 +13,24 @@ import React from "react";
 export default class uploader extends React.Component {
     constructor(props) {
         super(props);
-        console.log("props in uploader.js: ", props);
+        console.log("props in uploader: ", props);
         this.state = {};
-        console.log("this.state: ", this.state);
+        console.log("this.state in uploader: ", this.state);
+        this.fileSelectHandler = this.fileSelectHandler(this);
+        this.clickHandler = this.clickHandler(this);
     }
 
     fileSelectHandler(e) {
+        console.log("fileSelectHandler's e: ", e);
+        console.log("fileSelectHandler's e.target: ", e.target);
         this.file = e.target.files[0];
-        console.log("this.file: ", this.file);
+        console.log("fileSelectHandler's this.file: ", this.file);
     }
 
     clickHandler(e) {
         e.preventDefault();
         console.log("user just submitted, got parameter e: ", e);
-        console.log("this.file: ", this.file);
+        console.log("clickHandler's this.file: ", this.file);
         const fd = new FormData();
         fd.append("file", this.file);
         fetch("/upload", {

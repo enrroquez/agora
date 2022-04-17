@@ -8,6 +8,7 @@ export default class App extends React.Component {
         this.state = {};
         this.showUploader = this.showUploader.bind(this);
         this.hideUploader = this.hideUploader.bind(this);
+        this.updateProfilePic = this.updateProfilePic(this);
     }
 
     componentDidMount() {
@@ -17,6 +18,9 @@ export default class App extends React.Component {
                 console.log("data: ", data);
                 //first name, last name, etc.
                 this.setState(data);
+            })
+            .catch((err) => {
+                console.log("error fetching user", err.message);
             });
     }
 
@@ -29,6 +33,12 @@ export default class App extends React.Component {
     hideUploader() {
         this.setState({
             uploaderIsVisible: false,
+        });
+    }
+
+    updateProfilePic(newImageUrl) {
+        this.setState({
+            imageUrl: newImageUrl,
         });
     }
 
@@ -62,7 +72,10 @@ export default class App extends React.Component {
                     showUploader={this.showUploader}
                 />
                 {this.state.uploaderIsVisible && (
-                    <Uploader hideUploader={this.hideUploader} />
+                    <Uploader
+                        hideUploader={this.hideUploader}
+                        updateProfilePic={this.updateProfilePic}
+                    />
                 )}
             </>
         );

@@ -1,6 +1,6 @@
 export default function profilePic(props) {
     console.log("we are in profilePic");
-    console.log("props: ", props);
+    console.log("props in profilePic: ", props);
 
     function logout() {
         fetch("/logout.json").then(() => location.replace("/"));

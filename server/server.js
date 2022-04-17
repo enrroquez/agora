@@ -1,7 +1,6 @@
 const express = require("express");
 const app = express();
 const compression = require("compression");
-// const path = require("path");
 const bcrypt = require("bcryptjs");
 const db = require("./db");
 const cookieSession = require("cookie-session");
@@ -50,34 +49,34 @@ app.use(express.static(path.join(__dirname, "..", "client", "public")));
 
 app.post("/upload", uploader.single("file"), s3.upload, function (req, res) {
     // If nothing went wrong the file is already in the uploads directory
-    // console.log("req.body: ", req.body);
-    // console.log("req.file: ", req.file);
-    const { username, title, description } = req.body;
-    const { filename } = req.file;
+    console.log("req.body: ", req.body);
+    console.log("req.file: ", req.file);
+    // const { username, title, description } = req.body;
+    // const { filename } = req.file;
     // console.log("data from uploaded file: ", username, title, description, filename);
 
-    if (req.file) {
-        let fullUrl = "https://s3.amazonaws.com/spicedling/" + filename;
-        db.insertImage(username, title, description, fullUrl)
-            .then((result) => {
-                console.log("result after insert into DB: ", result);
+    // if (req.file) {
+    //     let fullUrl = "https://s3.amazonaws.com/spicedling/" + filename;
+    //     db.updateProfilePic(requsername, title, description, fullUrl)
+    //         .then((result) => {
+    //             console.log("result after insert into DB: ", result);
 
-                res.json(
-                    result
-                    // { // in order to have the success property enabled we should modify the app.js
-                    //     result,
-                    //     success: true,
-                    // }
-                );
-            })
-            .catch((err) => {
-                console.log("some error with DB: ", err);
-            });
-    } else {
-        res.json({
-            success: false,
-        });
-    }
+    //             res.json(
+    //                 result
+    //                 // { // in order to have the success property enabled we should modify the app.js
+    //                 //     result,
+    //                 //     success: true,
+    //                 // }
+    //             );
+    //         })
+    //         .catch((err) => {
+    //             console.log("some error with DB: ", err);
+    //         });
+    // } else {
+    //     res.json({
+    //         success: false,
+    //     });
+    // }
 });
 
 function hashPass(password) {
