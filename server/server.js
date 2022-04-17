@@ -1,34 +1,35 @@
 const express = require("express");
 const app = express();
 const compression = require("compression");
-const path = require("path");
+// const path = require("path");
 const bcrypt = require("bcryptjs");
 const db = require("./db");
 const cookieSession = require("cookie-session");
 const cryptoRandomString = require("crypto-random-string");
 const ses = require("./ses");
 
-///////////////////////////////////////////
-// const multer = require("multer");
-// const uidSafe = require("uid-safe");
-// const path = require("path");
-// const diskStorage = multer.diskStorage({
-//     destination: function (req, file, callback) {
-//         callback(null, path.join(__dirname, "uploads"));
-//     },
-//     filename: function (req, file, callback) {
-//         uidSafe(24).then(function (uid) {
-//             callback(null, uid + path.extname(file.originalname));
-//         });
-//     },
-// });
-// const uploader = multer({
-//     storage: diskStorage,
-//     limits: {
-//         fileSize: 2097152,
-//     },
-// });
-//////////////////////////////////////////
+/////////////////////////////////////////
+const s3 = require("./s3");
+const multer = require("multer");
+const uidSafe = require("uid-safe");
+const path = require("path");
+const diskStorage = multer.diskStorage({
+    destination: function (req, file, callback) {
+        callback(null, path.join(__dirname, "uploads"));
+    },
+    filename: function (req, file, callback) {
+        uidSafe(24).then(function (uid) {
+            callback(null, uid + path.extname(file.originalname));
+        });
+    },
+});
+const uploader = multer({
+    storage: diskStorage,
+    limits: {
+        fileSize: 2097152,
+    },
+});
+////////////////////////////////////////
 
 app.use(compression());
 
@@ -46,6 +47,38 @@ app.use(express.static(path.join(__dirname, "..", "client", "public")));
 
 // you will have a bunch more code here, remember to add your middlewares
 // remember to set up a route for registration
+
+app.post("/upload", uploader.single("file"), s3.upload, function (req, res) {
+    // If nothing went wrong the file is already in the uploads directory
+    // console.log("req.body: ", req.body);
+    // console.log("req.file: ", req.file);
+    const { username, title, description } = req.body;
+    const { filename } = req.file;
+    // console.log("data from uploaded file: ", username, title, description, filename);
+
+    if (req.file) {
+        let fullUrl = "https://s3.amazonaws.com/spicedling/" + filename;
+        db.insertImage(username, title, description, fullUrl)
+            .then((result) => {
+                console.log("result after insert into DB: ", result);
+
+                res.json(
+                    result
+                    // { // in order to have the success property enabled we should modify the app.js
+                    //     result,
+                    //     success: true,
+                    // }
+                );
+            })
+            .catch((err) => {
+                console.log("some error with DB: ", err);
+            });
+    } else {
+        res.json({
+            success: false,
+        });
+    }
+});
 
 function hashPass(password) {
     return bcrypt.genSalt().then((salt) => {
