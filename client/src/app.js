@@ -8,7 +8,7 @@ export default class App extends React.Component {
         this.state = {};
         this.showUploader = this.showUploader.bind(this);
         this.hideUploader = this.hideUploader.bind(this);
-        this.updateProfilePic = this.updateProfilePic(this);
+        this.updateProfilePic = this.updateProfilePic.bind(this);
     }
 
     componentDidMount() {
@@ -36,18 +36,14 @@ export default class App extends React.Component {
         });
     }
 
+    // To Uploader the App component must pass a function that gets passed an image url and puts it in App's state. Uploader can call this function after it uploads a new image.
+
     updateProfilePic(newImageUrl) {
+        console.log("updateProfilePic' newImageUrl: ", newImageUrl);
         this.setState({
             imageUrl: newImageUrl,
         });
-    }
-
-    // To Uploader the App component must pass a function that gets passed an image url and puts it in App's state. Uploader can call this function after it uploads a new image.
-
-    providesImageUrlToState(imageUrl) {
-        this.setState({
-            imageUrl: imageUrl,
-        });
+        console.log("this in updateProfilePic: ", this);
     }
 
     render() {

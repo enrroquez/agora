@@ -16,8 +16,8 @@ export default class uploader extends React.Component {
         console.log("props in uploader: ", props);
         this.state = {};
         console.log("this.state in uploader: ", this.state);
-        this.fileSelectHandler = this.fileSelectHandler(this);
-        this.clickHandler = this.clickHandler(this);
+        this.fileSelectHandler = this.fileSelectHandler.bind(this);
+        this.clickHandler = this.clickHandler.bind(this);
     }
 
     fileSelectHandler(e) {
@@ -38,8 +38,10 @@ export default class uploader extends React.Component {
             body: fd,
         })
             .then((res) => res.json())
-            .then((response) => {
-                console.log("response when upload: ", response);
+            .then(({ imageUrl }) => {
+                console.log("response when upload: ", imageUrl);
+                this.props.hideUploader();
+                this.props.updateProfilePic(imageUrl);
             })
             .catch((err) => {
                 console.log("err submitting new profilepic", err);
