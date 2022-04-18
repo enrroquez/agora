@@ -44,14 +44,10 @@ app.use(
 
 app.use(express.static(path.join(__dirname, "..", "client", "public")));
 
-// you will have a bunch more code here, remember to add your middlewares
-// remember to set up a route for registration
-
 app.post("/upload", uploader.single("file"), s3.upload, function (req, res) {
     // If nothing went wrong the file is already in the uploads directory
     console.log("req.body: ", req.body);
     console.log("req.file: ", req.file);
-    // const { username, title, description } = req.body;
     const { filename } = req.file;
     console.log("data from uploaded file: ", filename);
 
@@ -196,10 +192,9 @@ app.post("/login.json", (req, res) => {
                 .then((match) => {
                     if (match) {
                         console.log("comparison matched!");
-                        req.session.userId = rows[0].id; // req.session.userId está disponible en cualquier route?
+                        req.session.userId = rows[0].id;
                         console.log("req.session:", req.session);
                         console.log("req.session.userId: ", req.session.userId);
-                        // res.json({userId: req.session.userId});
                         res.json({ success: true });
                     } else {
                         console.log(
@@ -226,7 +221,6 @@ app.get("/logout.json", function (req, res) {
     res.redirect("/");
 });
 
-// this is the route we added in the encounter
 app.get("/user/id.json", function (req, res) {
     res.json({
         userId: req.session.userId,

@@ -38,10 +38,10 @@ export default class uploader extends React.Component {
             body: fd,
         })
             .then((res) => res.json())
-            .then(({ imageUrl }) => {
-                console.log("response when upload: ", imageUrl);
+            .then(({ image_url }) => {
+                console.log("response after upload: ", image_url);
                 this.props.hideUploader();
-                this.props.updateProfilePic(imageUrl);
+                this.props.updateProfilePic(image_url);
             })
             .catch((err) => {
                 console.log("err submitting new profilepic", err);
@@ -70,57 +70,3 @@ export default class uploader extends React.Component {
         );
     }
 }
-
-// When the change event happens on that input field it should create a FormData and do a POST request
-// When the promise from the fetch call is resolved, then Uploader knows the new image url. It needs to pass the new image url to a function that App created and passed to Uploader so that App can put the new url in its state
-
-// const aws = require("aws-sdk");
-// const fs = require("fs");
-
-// let secrets;
-// if (process.env.NODE_ENV == "production") {
-//     secrets = process.env; // in prod the secrets are environment variables
-// } else {
-//     secrets = require("./secrets"); // in dev they are in secrets.json which is listed in .gitignore
-// }
-
-// const s3 = new aws.S3({
-//     accessKeyId: secrets.AWS_KEY,
-//     secretAccessKey: secrets.AWS_SECRET,
-// });
-
-// exports.upload = (req, res, next) => {
-//     //why do we use export?
-//     // if there is no file! send an error message!
-//     if (!req.file) {
-//         return res.sendStatus(500);
-//     }
-
-//     // we only want to talk to s3 IF we have a file!
-//     // console.log("file: ", req.file);
-//     const { filename, mimetype, size, path } = req.file;
-
-//     const promise = s3
-//         .putObject({
-//             Bucket: "spicedling",
-//             ACL: "public-read",
-//             Key: filename,
-//             Body: fs.createReadStream(path),
-//             ContentType: mimetype,
-//             ContentLength: size,
-//         })
-//         .promise();
-
-//     promise
-//         .then(() => {
-//             // it worked!!!
-//             console.log("aws upload worked!");
-//             fs.unlink(path, () => {});
-//             next();
-//         })
-//         .catch((err) => {
-//             // uh oh
-//             console.log("err in s3 upload: ", err);
-//             res.sendStatus(404);
-//         });
-// };

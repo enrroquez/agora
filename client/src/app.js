@@ -39,7 +39,7 @@ export default class App extends React.Component {
     // To Uploader the App component must pass a function that gets passed an image url and puts it in App's state. Uploader can call this function after it uploads a new image.
 
     updateProfilePic(newImageUrl) {
-        console.log("updateProfilePic' newImageUrl: ", newImageUrl);
+        // console.log("updateProfilePic' newImageUrl: ", newImageUrl);
         this.setState({
             imageUrl: newImageUrl,
         });
