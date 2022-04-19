@@ -10,7 +10,7 @@ exports.updateProfilePic = (userId, imageUrl) => {
 
 exports.getUserInfo = (userId) => {
     return db.query(
-        `SELECT id, first, last, email, created_at FROM users WHERE id=$1`,
+        `SELECT id, first, last, email, created_at, image_url AS "imageUrl" FROM users WHERE id=$1`,
         [userId]
     );
 };
