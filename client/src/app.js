@@ -1,6 +1,7 @@
 import React from "react";
 import ProfilePic from "./profilePic";
 import Uploader from "./Uploader";
+import Profile from "./profile";
 
 export default class App extends React.Component {
     constructor() {
@@ -73,6 +74,11 @@ export default class App extends React.Component {
                         updateProfilePic={this.updateProfilePic}
                     />
                 )}
+                <Profile
+                    first={this.state.first}
+                    last={this.state.last}
+                    imageUrl={this.state.imageUrl}
+                />
             </>
         );
     }

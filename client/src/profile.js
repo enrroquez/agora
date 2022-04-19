@@ -1,15 +1,26 @@
-// Import ProfilePic from "./profilepic";
+import ProfilePic from "./profilePic";
 
-export default function Profile({ first, last, image }) {
-    //function components don't have state
-    //console.log("Props in Profile: ", props);
+export default function Profile(props) {
+    // function components don't have state
+    console.log("we are in Profile now");
+    console.log("Props in Profile: ", props);
+
+    function editProfile() {
+        alert("Let's edit my profile");
+        // fetch("/logout.json").then(() => location.replace("/"));
+    }
+
     return (
-        <div className="container">
-            <h1>This is the Profile Component</h1>
-            <h2>
-                My name is {first} {last}
+        <div className="someClass">
+            {/* <h2>
+                This is {props.first} {props.last}s profile.
             </h2>
-            <ProfilePic first={first} />
+            <ProfilePic
+                first={props.first}
+                last={props.last}
+                imageUrl={props.imageUrl}
+            /> */}
+            <button onClick={() => editProfile()}>Edit profile</button>
         </div>
     );
 }
