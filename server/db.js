@@ -1,6 +1,13 @@
 const spicedPg = require("spiced-pg");
 const db = spicedPg(`postgres:postgres:postgres@localhost:5432/social_db`);
 
+exports.updateBiography = (userId, biography) => {
+    return db.query(
+        `UPDATE users SET biography=$2 WHERE id=$1 RETURNING biography`,
+        [userId, biography]
+    );
+};
+
 exports.updateProfilePic = (userId, imageUrl) => {
     return db.query(
         `UPDATE users SET image_url=$2 WHERE id=$1 RETURNING image_url`,
@@ -10,7 +17,7 @@ exports.updateProfilePic = (userId, imageUrl) => {
 
 exports.getUserInfo = (userId) => {
     return db.query(
-        `SELECT id, first, last, email, created_at, image_url AS "imageUrl" FROM users WHERE id=$1`,
+        `SELECT id, first, last, email, created_at, biography, image_url AS "imageUrl" FROM users WHERE id=$1`,
         [userId]
     );
 };

@@ -10,6 +10,7 @@ export default class App extends React.Component {
         this.showUploader = this.showUploader.bind(this);
         this.hideUploader = this.hideUploader.bind(this);
         this.updateProfilePic = this.updateProfilePic.bind(this);
+        this.setBio = this.setBio.bind(this);
     }
 
     componentDidMount() {
@@ -34,6 +35,12 @@ export default class App extends React.Component {
     hideUploader() {
         this.setState({
             uploaderIsVisible: false,
+        });
+    }
+
+    setBio(newBio) {
+        this.setState({
+            biography: newBio,
         });
     }
 
@@ -87,6 +94,8 @@ export default class App extends React.Component {
                     last={this.state.last}
                     imageUrl={this.state.imageUrl}
                     showUploader={this.showUploader}
+                    biography={this.state.biography}
+                    setBio={this.setBio}
                 />
                 {this.state.uploaderIsVisible && (
                     <Uploader

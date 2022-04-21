@@ -1,4 +1,5 @@
 import ProfilePic from "./profilePic";
+import BioEditor from "./bioEditor";
 
 export default function Profile(props) {
     // function components don't have state
@@ -25,11 +26,7 @@ export default function Profile(props) {
                     showUploader={props.showUploader}
                     style={"imgInProfile"}
                 />
-                {/* <em>And you can add/edit your picture bio:</em>
-                <br />
-                <textarea rows="5" cols="80" id="bio"></textarea>
-                <br />
-                <button onClick={() => editProfile()}>Edit profile</button> */}
+                <BioEditor biography={props.biography} setBio={props.setBio} />
             </div>
         </>
     );

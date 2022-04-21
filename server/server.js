@@ -84,6 +84,16 @@ function compare(password, hash) {
 
 app.use(express.json());
 
+app.post("/profile/biography.json", (req, res) => {
+    db.updateBiography(req.session.userId, req.body.currentBio)
+        .then(({ rows }) => {
+            res.json(rows[0]);
+        })
+        .catch((err) => {
+            console.log("Some error updating bio", err);
+        });
+});
+
 app.get("/user.json", (req, res) => {
     db.getUserInfo(req.session.userId)
         .then(({ rows }) => {
