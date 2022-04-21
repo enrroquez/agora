@@ -44,6 +44,10 @@ app.use(
 
 app.use(express.static(path.join(__dirname, "..", "client", "public")));
 
+// app.get("/editBio", function (req,res){
+
+// }
+
 app.post("/upload", uploader.single("file"), s3.upload, function (req, res) {
     // If nothing went wrong the file is already in the uploads directory
     console.log("req.body: ", req.body);

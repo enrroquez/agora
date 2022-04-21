@@ -44,7 +44,7 @@ export default class App extends React.Component {
         this.setState({
             imageUrl: newImageUrl,
         });
-        console.log("this in updateProfilePic: ", this);
+        console.log("this.state in updateProfilePic: ", this.state);
     }
 
     render() {
@@ -52,20 +52,40 @@ export default class App extends React.Component {
         if (!this.state.id) {
             return <img src="/spinner.gif" alt="Loading..." height="200vh" />;
         }
+
+        function logout() {
+            fetch("/logout.json").then(() => location.replace("/"));
+        }
+
+        console.log("this.state in app: ", this.state);
+
         return (
             <>
                 {
-                    <div className="someClass">
-                        <img src="./agora.jpg" alt="logo" height="200vh" />
-                        <h2>
-                            Agora: <em>the public sphere</em>
-                        </h2>
+                    <div className="inHeader">
+                        <div>
+                            <img src="./agora.jpg" alt="logo" height="100px" />
+                            <h3>
+                                Agora <br />
+                                <em>the public sphere</em>
+                            </h3>
+                        </div>
+                        <div>
+                            <ProfilePic
+                                imageUrl={this.state.imageUrl}
+                                first={this.state.first}
+                                last={this.state.last}
+                                showUploader={this.showUploader}
+                                style={"imgInHeader"}
+                            />
+                            <button onClick={() => logout()}>Logout</button>
+                        </div>
                     </div>
                 }
-                <ProfilePic
-                    imageUrl={this.state.imageUrl}
+                <Profile
                     first={this.state.first}
                     last={this.state.last}
+                    imageUrl={this.state.imageUrl}
                     showUploader={this.showUploader}
                 />
                 {this.state.uploaderIsVisible && (
@@ -74,11 +94,13 @@ export default class App extends React.Component {
                         updateProfilePic={this.updateProfilePic}
                     />
                 )}
-                <Profile
-                    first={this.state.first}
-                    last={this.state.last}
-                    imageUrl={this.state.imageUrl}
-                />
+                {
+                    <div className="inFooter">
+                        <h3>
+                            Welcome {this.state.first} {this.state.last}!
+                        </h3>
+                    </div>
+                }
             </>
         );
     }
