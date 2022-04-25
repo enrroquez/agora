@@ -32,6 +32,7 @@ export default function FindPeople() {
             <div id="usersContainer">
                 {!currentSearch && <h3>Most recent members</h3>}
                 {currentSearch && <h3>Your search results</h3>}
+                {console.log("arrayOfUsers: ", arrayOfUsers)}
                 {arrayOfUsers.map((user) => (
                     <div key={user.id}>
                         {console.log("user.id: ", user.id)}
@@ -39,11 +40,7 @@ export default function FindPeople() {
                         <div>
                             <img
                                 className="mostRecentImage"
-                                src={
-                                    user.imageUrl
-                                        ? user.imageUrl
-                                        : "images/anon.jpg"
-                                }
+                                src={user.imageUrl ? user.imageUrl : "anon.jpg"}
                                 alt={`${user.first} ${user.last}`}
                             />
                         </div>
