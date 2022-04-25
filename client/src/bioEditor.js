@@ -57,7 +57,6 @@ export default class BioEditor extends React.Component {
                             <textarea
                                 value={this.state.currentBio}
                                 onChange={this.handleBioChange}
-                                resize="none"
                             />
                         </div>
                         <br />

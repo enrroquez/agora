@@ -44,9 +44,26 @@ app.use(
 
 app.use(express.static(path.join(__dirname, "..", "client", "public")));
 
-// app.get("/editBio", function (req,res){
-
-// }
+app.get("/find-users", function (req, res) {
+    console.log("req.query.search: ", req.query.search);
+    if (req.query.search) {
+        db.searchForUsers(req.query.search)
+            .then(({ rows }) => {
+                res.json(rows);
+            })
+            .catch((err) => {
+                console.log("some error while doing a search for users: ", err);
+            });
+    } else {
+        db.findRecentUsers()
+            .then(({ rows }) => {
+                res.json(rows);
+            })
+            .catch((err) => {
+                console.log("some error finding mos recent members: ", err);
+            });
+    }
+});
 
 app.post("/upload", uploader.single("file"), s3.upload, function (req, res) {
     // If nothing went wrong the file is already in the uploads directory

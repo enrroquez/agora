@@ -1,7 +1,9 @@
 import React from "react";
+import { BrowserRouter, Route } from "react-router-dom";
 import ProfilePic from "./profilePic";
 import Uploader from "./Uploader";
 import Profile from "./profile";
+import FindPeople from "./FindPeople";
 
 export default class App extends React.Component {
     constructor() {
@@ -64,11 +66,15 @@ export default class App extends React.Component {
             fetch("/logout.json").then(() => location.replace("/"));
         }
 
+        // function goHome () {
+
+        // }
+
         console.log("this.state in app: ", this.state);
 
         return (
             <>
-                {
+                <BrowserRouter>
                     <div className="inHeader">
                         <div>
                             <img src="./agora.jpg" alt="logo" height="100px" />
@@ -86,30 +92,39 @@ export default class App extends React.Component {
                                 style={"imgInHeader"}
                             />
                             <button onClick={() => logout()}>Logout</button>
+                            {/* <button onClick={(location.replace = "/")}>
+                                Home
+                            </button>
+                            <button onClick={(location.replace = "/users")}>
+                                Find some friends
+                            </button> */}
                         </div>
                     </div>
-                }
-                <Profile
-                    first={this.state.first}
-                    last={this.state.last}
-                    imageUrl={this.state.imageUrl}
-                    showUploader={this.showUploader}
-                    biography={this.state.biography}
-                    setBio={this.setBio}
-                />
-                {this.state.uploaderIsVisible && (
-                    <Uploader
-                        hideUploader={this.hideUploader}
-                        updateProfilePic={this.updateProfilePic}
-                    />
-                )}
-                {
+                    <Route exact path="/">
+                        <Profile
+                            first={this.state.first}
+                            last={this.state.last}
+                            imageUrl={this.state.imageUrl}
+                            showUploader={this.showUploader}
+                            biography={this.state.biography}
+                            setBio={this.setBio}
+                        />
+                        {this.state.uploaderIsVisible && (
+                            <Uploader
+                                hideUploader={this.hideUploader}
+                                updateProfilePic={this.updateProfilePic}
+                            />
+                        )}
+                    </Route>
+                    <Route path="/users">
+                        <FindPeople />
+                    </Route>
                     <div className="inFooter">
                         <h3>
                             Welcome {this.state.first} {this.state.last}!
                         </h3>
                     </div>
-                }
+                </BrowserRouter>
             </>
         );
     }

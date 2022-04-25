@@ -1,6 +1,4 @@
 body {
-    /* margin: 0;
-    padding: 0; */
     width: 100vh;
     height: 100vh;
     background-color: rgb(208, 208, 224);
@@ -8,9 +6,6 @@ body {
     flex-direction: column;
     flex-wrap: nowrap;
     align-content: stretch;
-    /* grid-template-columns: 1fr 3fr; */
-    /* grid-template-rows: min-content auto min-content; */
-    /* grid-template-rows: auto; */
     text-align: center;
 }
 
@@ -28,8 +23,6 @@ body {
 }
 
 .inHeader {
-    /* grid-column: 1/3;
-    grid-row: 1/2; */
     flex-grow: 1;
     background-color: yellowgreen;
     display: flex;
@@ -41,22 +34,12 @@ body {
 }
 
 .inFooter {
-    /* grid-column: 1/3;
-    grid-row: 3/4; */
     flex-grow: 1;
     background-color: lightcoral;
     text-align: center;
 }
 
-/* .inAside {
-    grid-column: 1/2;
-    grid-row: 2/3;
-    background-color: lightblue;
-} */
-
 .inMain {
-    /* grid-column: 2/3;
-    grid-row: 2/3; */
     flex-grow: 2;
     background-color: violet;
     text-align: center;
@@ -67,5 +50,11 @@ body {
 #bioBox {
     border: 3px solid lightsalmon;
     float: no;
-    resize: none;
+}
+
+.mostRecentImage {
+    height: 150px;
+}
+
+#usersContainer {
 }

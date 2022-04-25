@@ -45,7 +45,7 @@ export default class Login extends Component {
                         error: "There was an error, please try again.",
                     });
                 } else {
-                    location.reload();
+                    location.replace("/"); //location.reload();
                 }
             })
             .catch((err) => {

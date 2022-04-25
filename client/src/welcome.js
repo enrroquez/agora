@@ -6,7 +6,7 @@ import ResetPassword from "./ResetPassword";
 export default function Welcome() {
     return (
         <>
-            {
+            <BrowserRouter>
                 <div className="someClass">
                     <img src="./agora.jpg" alt="logo" height="200vh" />
                     <h1>Welcome to Agora</h1>
@@ -14,8 +14,6 @@ export default function Welcome() {
                         <em>The public sphere</em>
                     </h2>
                 </div>
-            }
-            <BrowserRouter>
                 <div>
                     <Route exact path="/">
                         <Registration />
