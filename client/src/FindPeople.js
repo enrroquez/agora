@@ -25,7 +25,7 @@ export default function FindPeople() {
         <section id="findPeople">
             <h1>Find interesting people here</h1>
             <input
-                placeholder="Enter name"
+                placeholder="Enter a name"
                 onChange={(e) => setCurrentSearch(e.target.value)}
             />
             <div>{currentSearch}</div>
@@ -36,15 +36,20 @@ export default function FindPeople() {
                     <div key={user.id}>
                         {console.log("user.id: ", user.id)}
                         {console.log("user.imageUrl: ", user.imageUrl)}
-                        <img
-                            className="mostRecentImage"
-                            src={
-                                user.imageUrl
-                                    ? user.imageUrl
-                                    : "images/anon.jpg"
-                            }
-                            alt={`${user.first} ${user.last}`}
-                        />
+                        <div>
+                            <img
+                                className="mostRecentImage"
+                                src={
+                                    user.imageUrl
+                                        ? user.imageUrl
+                                        : "images/anon.jpg"
+                                }
+                                alt={`${user.first} ${user.last}`}
+                            />
+                        </div>
+                        <div>
+                            {user.first} {user.last}
+                        </div>
                     </div>
                 ))}
             </div>

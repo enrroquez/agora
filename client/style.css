@@ -7,6 +7,7 @@ body {
     flex-wrap: nowrap;
     align-content: stretch;
     text-align: center;
+    font-family: sans-serif;
 }
 
 .someClass {
@@ -53,8 +54,13 @@ body {
 }
 
 .mostRecentImage {
+    background-position: center center;
     height: 150px;
+    width: auto;
+    border-radius: 50%;
 }
 
 #usersContainer {
+    /* display: flex;
+    flex-direction: row; */
 }
