@@ -3,14 +3,14 @@ const db = spicedPg(`postgres:postgres:postgres@localhost:5432/social_db`);
 
 exports.searchForUsers = (currentSearch) => {
     return db.query(
-        `SELECT id, first, last, image_url AS "imageURL", biography FROM users WHERE first ILIKE $1 LIMIT 3`,
+        `SELECT id, first, last, image_url AS "imageUrl", biography FROM users WHERE first ILIKE $1 LIMIT 3`,
         [currentSearch + "%"]
     );
 };
 
 exports.findRecentUsers = () => {
     return db.query(
-        `SELECT id, first, last, image_url AS "imageURL", biography FROM users ORDER BY id DESC LIMIT 3`
+        `SELECT id, first, last, image_url AS "imageUrl", biography FROM users ORDER BY id DESC LIMIT 3`
     );
 };
 

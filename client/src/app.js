@@ -91,13 +91,14 @@ export default class App extends React.Component {
                                 showUploader={this.showUploader}
                                 style={"imgInHeader"}
                             />
-                            <button onClick={() => logout()}>Logout</button>
-                            {/* <button onClick={(location.replace = "/")}>
+                            <br />
+                            <button onClick={() => (location.href = "./")}>
                                 Home
                             </button>
-                            <button onClick={(location.replace = "/users")}>
+                            <button onClick={() => (location.href = "./users")}>
                                 Find some friends
-                            </button> */}
+                            </button>
+                            <button onClick={() => logout()}>Logout</button>
                         </div>
                     </div>
                     <Route exact path="/">

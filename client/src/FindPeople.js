@@ -33,8 +33,9 @@ export default function FindPeople() {
                 {!currentSearch && <h3>Most recent members</h3>}
                 {currentSearch && <h3>Your search results</h3>}
                 {arrayOfUsers.map((user) => (
-                    // console.log('user.id: ', user.id);
                     <div key={user.id}>
+                        {console.log("user.id: ", user.id)}
+                        {console.log("user.imageUrl: ", user.imageUrl)}
                         <img
                             className="mostRecentImage"
                             src={
