@@ -10,7 +10,7 @@ export default function FindPeople() {
     useEffect(() => {
         let abort = false;
 
-        fetch(`api/find-users?search=${currentSearch}`)
+        fetch(`/find-users?search=${currentSearch}`)
             .then((res) => res.json())
             .then((response) => {
                 console.log("response: ", response);

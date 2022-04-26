@@ -44,12 +44,18 @@ app.use(
 
 app.use(express.static(path.join(__dirname, "..", "client", "public")));
 
-app.get("api/user/:id", function (req, res) {
+app.get(`/api/user/:id`, function (req, res) {
     console.log("req.params.id: ", req.params.id);
     db.getUserInfo(req.params.id)
         .then(({ rows }) => {
             console.log("rows from DB in getUser Info: ", rows);
-            res.json(rows[0]);
+            if (rows.lenght == 0) {
+                res.json({ userDontExist: true });
+            } else if (req.session.userId == rows[0].id) {
+                res.json({ sameUser: true });
+            } else {
+                res.json(rows[0]);
+            }
         })
         .catch((err) => {
             console.log("error retriving user data from DB: ", err);

@@ -67,10 +67,6 @@ export default class App extends React.Component {
             fetch("/logout.json").then(() => location.replace("/"));
         }
 
-        // function goHome () {
-
-        // }
-
         console.log("this.state in app: ", this.state);
 
         return (

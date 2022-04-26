@@ -14,12 +14,13 @@ export default function OtherProfile() {
             .then((res) => res.json())
             .then((data) => {
                 console.log("data fetched from server: ", data);
-
-                // if(/*current user*/) {
-                //     history.replace("/")
-                // } else {
-                //     // Update State
-                // }
+                if (data.userDontExist) {
+                    history.replace("/");
+                } else if (data.sameUser) {
+                    history.replace("/");
+                } else {
+                    setUser(data);
+                }
             });
     }, []);
 
@@ -27,8 +28,16 @@ export default function OtherProfile() {
     if (!user.id) return <></>;
     else
         return (
-            <section>
-                <div>Profile from some other user</div>
-            </section>
+            <div>
+                <h3>
+                    This is {user.first} {user.last}'s profile.
+                </h3>
+                <img
+                    className="remember"
+                    src={user.imageUrl || "anon.jpg"}
+                    alt={`${user.first} ${user.last}`}
+                />
+                <p>{user.biography}</p>
+            </div>
         );
 }
