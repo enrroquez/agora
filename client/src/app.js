@@ -4,6 +4,7 @@ import ProfilePic from "./profilePic";
 import Uploader from "./Uploader";
 import Profile from "./profile";
 import FindPeople from "./FindPeople";
+import OtherProfile from "./OtherProfile";
 
 export default class App extends React.Component {
     constructor() {
@@ -119,6 +120,9 @@ export default class App extends React.Component {
                     </Route>
                     <Route path="/users">
                         <FindPeople />
+                    </Route>
+                    <Route exact path="/user/:id">
+                        <OtherProfile />
                     </Route>
                     <div className="inFooter">
                         <h3>

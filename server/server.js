@@ -44,6 +44,18 @@ app.use(
 
 app.use(express.static(path.join(__dirname, "..", "client", "public")));
 
+app.get("api/user/:id", function (req, res) {
+    console.log("req.params.id: ", req.params.id);
+    db.getUserInfo(req.params.id)
+        .then(({ rows }) => {
+            console.log("rows from DB in getUser Info: ", rows);
+            res.json(rows[0]);
+        })
+        .catch((err) => {
+            console.log("error retriving user data from DB: ", err);
+        });
+});
+
 app.get("/find-users", function (req, res) {
     console.log("req.query.search: ", req.query.search);
     if (req.query.search) {

@@ -1,4 +1,5 @@
 import { useState, useEffect } from "react";
+import { Link } from "react-router-dom";
 
 export default function FindPeople() {
     const [arrayOfUsers, setArrayOfUsers] = useState([]);
@@ -9,12 +10,12 @@ export default function FindPeople() {
     useEffect(() => {
         let abort = false;
 
-        fetch(`/find-users?search=${currentSearch}`)
+        fetch(`api/find-users?search=${currentSearch}`)
             .then((res) => res.json())
             .then((response) => {
                 console.log("response: ", response);
                 if (!abort) {
-                    setArrayOfUsers(response);
+                    setArrayOfUsers(response); //>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
                 }
             });
 
@@ -38,11 +39,17 @@ export default function FindPeople() {
                         {console.log("user.id: ", user.id)}
                         {console.log("user.imageUrl: ", user.imageUrl)}
                         <div>
-                            <img
-                                className="mostRecentImage"
-                                src={user.imageUrl ? user.imageUrl : "anon.jpg"}
-                                alt={`${user.first} ${user.last}`}
-                            />
+                            <Link to={`user/${user.id}`}>
+                                <img
+                                    className="mostRecentImage"
+                                    src={
+                                        user.imageUrl
+                                            ? user.imageUrl
+                                            : "anon.jpg"
+                                    }
+                                    alt={`${user.first} ${user.last}`}
+                                />
+                            </Link>
                         </div>
                         <div>
                             {user.first} {user.last}
