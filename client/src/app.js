@@ -5,6 +5,7 @@ import Uploader from "./Uploader";
 import Profile from "./profile";
 import FindPeople from "./FindPeople";
 import OtherProfile from "./OtherProfile";
+import { Link } from "react-router-dom";
 
 export default class App extends React.Component {
     constructor() {
@@ -89,12 +90,14 @@ export default class App extends React.Component {
                                 style={"imgInHeader"}
                             />
                             <br />
-                            <button onClick={() => (location.href = "./")}>
+                            <Link className="textToButton" to="/">
                                 Home
-                            </button>
-                            <button onClick={() => (location.href = "./users")}>
+                            </Link>
+                            <> </>
+                            <Link className="textToButton" to="/users">
                                 Find some friends
-                            </button>
+                            </Link>
+                            <> </>
                             <button onClick={() => logout()}>Logout</button>
                         </div>
                     </div>
@@ -107,13 +110,13 @@ export default class App extends React.Component {
                             biography={this.state.biography}
                             setBio={this.setBio}
                         />
-                        {this.state.uploaderIsVisible && (
-                            <Uploader
-                                hideUploader={this.hideUploader}
-                                updateProfilePic={this.updateProfilePic}
-                            />
-                        )}
                     </Route>
+                    {this.state.uploaderIsVisible && (
+                        <Uploader
+                            hideUploader={this.hideUploader}
+                            updateProfilePic={this.updateProfilePic}
+                        />
+                    )}
                     <Route path="/users">
                         <FindPeople />
                     </Route>

@@ -64,3 +64,16 @@ body {
     /* display: flex;
     flex-direction: row; */
 }
+
+.textToButton {
+    /* width: min-content; */
+    height: 15px;
+    background: #efeeed;
+    padding: 5px;
+    text-align: center;
+    border-radius: 5px;
+    color: black;
+    line-height: 10px;
+    text-decoration: none;
+    font-size: smaller;
+}

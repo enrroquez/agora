@@ -15,7 +15,7 @@ export default function FindPeople() {
             .then((response) => {
                 console.log("response: ", response);
                 if (!abort) {
-                    setArrayOfUsers(response); //>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+                    setArrayOfUsers(response);
                 }
             });
 
@@ -60,40 +60,3 @@ export default function FindPeople() {
         </section>
     );
 }
-
-//     useEffect(() => {
-//         fetch(`/users`)
-//             .then((res) => res.json())
-//             .then(({arrayOfUsers}) => {
-//                     console.log(arrayOfUsers);
-//             });
-//         return ();
-//     });
-// }
-
-// setArrayOfUsers(){
-
-// };
-
-// setCurrentSearch(){
-
-// };
-
-// // you could use this to ensure that only the correct results appear when HTTP responses are received in a different order than the one in which the requests were made.
-// useEffect(() => {
-//     let abort;
-//     (async () => {
-//         const data = await fetch(
-//             `/user/${id}.json`
-//         ).then(
-//             response => response.json()
-//         );
-//         if (!abort) {
-//             setUser(data.user);
-//         }
-
-//     })();
-//     return () => {
-//         abort = true;
-//     };
-// }, [id]);

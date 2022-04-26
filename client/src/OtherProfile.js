@@ -34,6 +34,7 @@ export default function OtherProfile() {
                 </h3>
                 <img
                     className="remember"
+                    // don't forget
                     src={user.imageUrl || "anon.jpg"}
                     alt={`${user.first} ${user.last}`}
                 />
