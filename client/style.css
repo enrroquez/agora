@@ -1,0 +1,79 @@
+body {
+    width: 100vh;
+    height: 100vh;
+    background-color: rgb(208, 208, 224);
+    display: flex;
+    flex-direction: column;
+    flex-wrap: nowrap;
+    align-content: stretch;
+    text-align: center;
+    font-family: sans-serif;
+}
+
+.someClass {
+    text-align: center;
+}
+
+.imgInHeader {
+    border-radius: 25%;
+    height: 100px;
+}
+
+.imgInProfile {
+    height: 300px;
+}
+
+.inHeader {
+    flex-grow: 1;
+    background-color: yellowgreen;
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    padding: 10px;
+    margin: 10px;
+    text-align: center;
+}
+
+.inFooter {
+    flex-grow: 1;
+    background-color: lightcoral;
+    text-align: center;
+}
+
+.inMain {
+    flex-grow: 2;
+    background-color: violet;
+    text-align: center;
+    padding: 10px;
+    margin: 10px;
+}
+
+#bioBox {
+    border: 3px solid lightsalmon;
+    float: no;
+}
+
+.mostRecentImage {
+    background-position: center center;
+    height: 150px;
+    width: auto;
+    border-radius: 50%;
+}
+
+#usersContainer {
+    /* display: flex;
+    flex-direction: row; */
+}
+
+.textToButton {
+    /* width: min-content; */
+    height: 15px;
+    background: #efeeed;
+    padding: 5px;
+    text-align: center;
+    border-radius: 5px;
+    color: black;
+    line-height: 10px;
+    text-decoration: none;
+    font-size: smaller;
+}
