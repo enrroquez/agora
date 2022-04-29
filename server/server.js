@@ -31,6 +31,7 @@ const uploader = multer({
 ////////////////////////////////////////
 
 app.use(compression());
+app.use(express.json());
 
 let sessionSecret = require("../secrets.json").SESSION_SECRET;
 
@@ -43,6 +44,21 @@ app.use(
 );
 
 app.use(express.static(path.join(__dirname, "..", "client", "public")));
+
+app.post(`/saveCitation`, (req, res) => {
+    console.log("req.body: ", req.body);
+    const { citationInProgress, authorInProgress, sourceInProgress } = req.body;
+    db.addCitation(citationInProgress, authorInProgress, sourceInProgress)
+        .then(({ rows }) => {
+            //Would be good to bring back: name, created_at and send them to client
+            console.log("success, what do I get back?: ", rows[0]);
+            res.json({ success: true });
+        })
+        .catch((err) => {
+            console.log("error adding citation in DB: ", err);
+            res.json({ success: false });
+        });
+});
 
 app.get(`/api/user/:id`, function (req, res) {
     console.log("req.params.id: ", req.params.id);
@@ -116,8 +132,6 @@ function hashPass(password) {
 function compare(password, hash) {
     return bcrypt.compare(password, hash);
 }
-
-app.use(express.json());
 
 app.post("/profile/biography.json", (req, res) => {
     db.updateBiography(req.session.userId, req.body.currentBio)
