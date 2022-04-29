@@ -6,6 +6,7 @@ import Profile from "./profile";
 import FindPeople from "./FindPeople";
 import OtherProfile from "./OtherProfile";
 import { Link } from "react-router-dom";
+import InlineCommenting from "./InlineCommenting";
 
 export default class App extends React.Component {
     constructor() {
@@ -122,6 +123,9 @@ export default class App extends React.Component {
                     </Route>
                     <Route exact path="/user/:id">
                         <OtherProfile />
+                    </Route>
+                    <Route exact path="/commenting">
+                        <InlineCommenting />
                     </Route>
                     <div className="inFooter">
                         <h3>

@@ -29,7 +29,10 @@ export default function FindPeople() {
                 placeholder="Enter a name"
                 onChange={(e) => setCurrentSearch(e.target.value)}
             />
-            <div>{currentSearch}</div>
+            <div>
+                <br />
+                Search terms: {currentSearch}
+            </div>
             <div id="usersContainer">
                 {!currentSearch && <h3>Most recent members</h3>}
                 {currentSearch && <h3>Your search results</h3>}

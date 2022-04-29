@@ -77,3 +77,30 @@ body {
     text-decoration: none;
     font-size: smaller;
 }
+
+.citation-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.citation {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    border-radius: 25px;
+    border: 2px solid #73ad21;
+    background-color: white;
+    padding: 20px;
+    /* width: 600px; */
+    /* height: 150px; */
+    text-align: center;
+    font-style: italic;
+}
+
+.author {
+    text-align: right;
+    font-style: bold;
+    font-size: larger;
+    padding: 20px;
+}
