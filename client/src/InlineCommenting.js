@@ -3,12 +3,14 @@ import { useState } from "react";
 export default function inlineCommenting() {
     const [citationInProgress, setCitation] = useState("");
     const [authorInProgress, setAuthor] = useState("");
+    const [sourceInProgress, setSource] = useState("");
 
     function fixEntry() {
         let fixedCitation = citationInProgress;
         let fixedAuthor = authorInProgress;
         console.log("Citation fixed: ", fixedCitation);
         console.log("Author fixed: ", fixedAuthor);
+        console.log("Source fixed: ", fixedSource);
     }
 
     function getCitation() {
@@ -29,6 +31,10 @@ export default function inlineCommenting() {
                     placeholder="Author"
                     onChange={(e) => setAuthor(e.target.value)}
                 />
+                <input
+                    placeholder="Source"
+                    onChange={(e) => setSource(e.target.value)}
+                />
                 <button type="button" onClick={fixEntry}>
                     Capture
                 </button>
@@ -37,8 +43,9 @@ export default function inlineCommenting() {
             <br />
             <div className="citation-container">
                 <div className="citation">
-                    <div onMouseUp={getCitation}>"{citationInProgress}"</div>
-                    <div className="author">{authorInProgress}</div>
+                    <p onMouseUp={getCitation}>"{citationInProgress}"</p>
+                    <p className="author">{authorInProgress}</p>
+                    <p className="source">{sourceInProgress}</p>
                 </div>
             </div>
             <br />
