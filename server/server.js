@@ -47,8 +47,14 @@ app.use(express.static(path.join(__dirname, "..", "client", "public")));
 
 app.post(`/saveCitation`, (req, res) => {
     console.log("req.body: ", req.body);
+    console.log("req.session.userId:", req.session.userId);
     const { citationInProgress, authorInProgress, sourceInProgress } = req.body;
-    db.addCitation(citationInProgress, authorInProgress, sourceInProgress)
+    db.addCitation(
+        citationInProgress,
+        authorInProgress,
+        sourceInProgress,
+        req.session.userId
+    )
         .then(({ rows }) => {
             //Would be good to bring back: name, created_at and send them to client
             console.log("success, what do I get back?: ", rows[0]);

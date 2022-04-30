@@ -1,11 +1,11 @@
 const spicedPg = require("spiced-pg");
 const db = spicedPg(`postgres:postgres:postgres@localhost:5432/social_db`);
 
-exports.addCitation = (citation, author, source) => {
+exports.addCitation = (citation, author, source, userId) => {
     return db.query(
-        `INSERT INTO citations (citation, author, source)
-            VALUES ($1, $2, $3)`,
-        [citation, author, source]
+        `INSERT INTO citations (citation, author, source, user_id)
+            VALUES ($1, $2, $3, $4)`,
+        [citation, author, source, userId]
     );
 };
 

@@ -4,7 +4,7 @@ export default function inlineCommenting() {
     const [citationInProgress, setCitation] = useState("");
     const [authorInProgress, setAuthor] = useState("");
     const [sourceInProgress, setSource] = useState("");
-    const [captureIsVisible, setCapture] = useState("false"); //please take a look below
+    const [captureIsVisible, setCapture] = useState("");
 
     function getCitation() {
         let capturedCitation = window.getSelection().toString();
@@ -21,13 +21,12 @@ export default function inlineCommenting() {
                 citationInProgress,
                 authorInProgress,
                 sourceInProgress,
-                //userId? how to include the userId if it is not this.state.userId any more with hooks? How can I include the userId to the POST request?
             }),
         })
             .then((res) => res.json())
             .then(({ success }) => {
-                console.log("response from save citation: ", success); //success (true or false) I get from a query db.addCitation...
-                setCapture(success); //Not sure how to declare this function. How do I make success to cause effect in captureIsVisible?
+                setCapture(success);
+                console.log("captureIsVisible: ", captureIsVisible);
             })
             .catch((err) => {
                 console.log("error sending data to server: ", err);
@@ -38,7 +37,7 @@ export default function inlineCommenting() {
         <section>
             <h1>Enter a text to analyse</h1>
             <br />
-            {!captureIsVisible && ( //conditional rendering of a form
+            {!captureIsVisible && ( //conditional rendering of a form, it becomes not visible after capturing
                 <>
                     <form id="capture">
                         <input
@@ -75,8 +74,8 @@ export default function inlineCommenting() {
 
 // In the earlier epochs of history, we find almost everywhere a complicated arrangement of society into various orders, a manifold gradation of social rank. In ancient Rome we have patricians, knights, plebeians, slaves; in the Middle Ages, feudal lords, vassals, guild-masters, journeymen, apprentices, serfs; in almost all of these classes, again, subordinate gradations. Karl Marx https://www.marxists.org/archive/marx/works/1848/communist-manifesto/ch02.htm
 // I saw the Emperor—this world-soul [Weltseele]—riding out of the city on reconnaissance. It is indeed a wonderful sensation to see such an individual, who, concentrated here at a single point, astride a horse, reaches out over the world and masters it. Georg Wilhelm Friedrich Hegel https://en.wikipedia.org/wiki/Georg_Wilhelm_Friedrich_Hegel
-// function sendSelectionToServer() {
 
+// function sendSelectionToServer() {
 //     fetch(`/saveSelection`, {
 //         method: "POST",
 //         headers: {
