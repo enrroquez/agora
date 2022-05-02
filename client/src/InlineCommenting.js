@@ -1,5 +1,37 @@
 import { useState } from "react";
 
+///////////////////////////////////////
+import { io } from "socket.io-client";
+
+const socket = io.connect();
+
+socket.on("greeting", (data) => {
+    console.log("data: ", data);
+});
+
+socket.on("user-click-inform", (userClick) => {
+    console.log("userClick: ", userClick);
+});
+
+socket.on("exceptMe", (data) => {
+    console.log("data: ", data);
+});
+
+socket.on("private", (data) => {
+    console.log("data: ", data);
+});
+
+socket.on("bob", (data) => {
+    console.log("data: ", data);
+});
+
+socket.emit("thanks", [
+    "hey there mr server",
+    "thats so nice of you",
+    "im so happy to be here",
+]);
+/////////////////////////////////////////
+
 export default function inlineCommenting() {
     const [citationInProgress, setCitation] = useState("");
     const [authorInProgress, setAuthor] = useState("");
@@ -128,6 +160,18 @@ export default function inlineCommenting() {
                             Post
                         </button>
                     </form>
+                    <button
+                        onClick={() =>
+                            socket.emit("user-click", {
+                                info: [
+                                    "thanks",
+                                    "the user just clicked the button",
+                                ],
+                            })
+                        }
+                    >
+                        Click me for a nice socket message
+                    </button>
                 </>
             )}
         </section>
@@ -136,25 +180,6 @@ export default function inlineCommenting() {
 
 // In the earlier epochs of history, we find almost everywhere a complicated arrangement of society into various orders, a manifold gradation of social rank. In ancient Rome we have patricians, knights, plebeians, slaves; in the Middle Ages, feudal lords, vassals, guild-masters, journeymen, apprentices, serfs; in almost all of these classes, again, subordinate gradations. Karl Marx https://www.marxists.org/archive/marx/works/1848/communist-manifesto/ch02.htm
 // I saw the Emperor—this world-soul [Weltseele]—riding out of the city on reconnaissance. It is indeed a wonderful sensation to see such an individual, who, concentrated here at a single point, astride a horse, reaches out over the world and masters it. Georg Wilhelm Friedrich Hegel https://en.wikipedia.org/wiki/Georg_Wilhelm_Friedrich_Hegel
-
-// function sendSelectionToServer() {
-//     fetch(`/saveSelection`, {
-//         method: "POST",
-//         headers: {
-//             "Content-Type": "application/json",
-//         },
-//         body: JSON.stringify({
-//             selectionInProgress,
-//         }),
-//     })
-//         .then((res) => res.json())
-//         .then((response) => {
-//             console.log("response from save citation: ", response);
-//         })
-//         .catch((err) => {
-//             console.log("error retriving data from DB: ", err);
-//         });
-// }
 
 // function sendCommentToServer() {
 //     fetch(`/saveComment`, {

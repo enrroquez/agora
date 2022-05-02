@@ -38,10 +38,19 @@ const io = require("socket.io")(server, {
 
 let onlineUsers = [];
 
+io.use(function (socket, next) {
+    cookieSession(socket.request, socket.request.res, next);
+});
+
 io.on("connection", (socket) => {
     console.log(`New connection established with user ${socket.id}`);
     onlineUsers.push(socket.id);
     console.log("onlineUsers: ", onlineUsers);
+    console.log("socket.request.session: ", socket.request.session);
+    console.log(
+        "socket.request.session.userId;: ",
+        socket.request.session.userId
+    );
 
     socket.emit("greeting", {
         message: "Hello from the server",
