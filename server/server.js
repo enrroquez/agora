@@ -45,6 +45,33 @@ app.use(
 
 app.use(express.static(path.join(__dirname, "..", "client", "public")));
 
+app.post(`/saveSelection`, (req, res) => {
+    console.log("req.body: ", req.body);
+    console.log("req.session.userId:", req.session.userId);
+    const { capturedSelection } = req.body;
+    db.addSelection(
+        capturedSelection,
+        req.session.citationId,
+        req.session.userId
+    )
+        .then(({ rows }) => {
+            console.log(
+                "DB selection insert success, what do I get back?: ",
+                rows[0]
+            );
+            req.session.selectionId = rows[0].id;
+            res.json({
+                success: true,
+                "Chi Kung": "cool",
+                citationId: req.session.citationId,
+            });
+        })
+        .catch((err) => {
+            console.log("error adding citation in DB: ", err);
+            res.json({ success: false });
+        });
+});
+
 app.post(`/saveCitation`, (req, res) => {
     console.log("req.body: ", req.body);
     console.log("req.session.userId:", req.session.userId);
@@ -57,13 +84,25 @@ app.post(`/saveCitation`, (req, res) => {
     )
         .then(({ rows }) => {
             //Would be good to bring back: name, created_at and send them to client
-            console.log("success, what do I get back?: ", rows[0]);
-            res.json({ success: true });
+            console.log(
+                "DB citation insert success, what do I get back?: ",
+                rows[0]
+            );
+            req.session.citationId = rows[0].id;
+            res.json({ success: true, citationId: rows[0].id });
         })
         .catch((err) => {
             console.log("error adding citation in DB: ", err);
             res.json({ success: false });
         });
+    // await db
+    //     .findAuthorInfo(citationId)
+    //     .then(({ rows }) => {
+    //         console.log("DB authors data: ", rows[0]);
+    //     })
+    //     .catch((err) => {
+    //         console.log("Some error in DB select: ", err);
+    //     });
 });
 
 app.get(`/api/user/:id`, function (req, res) {

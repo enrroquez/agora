@@ -1,10 +1,28 @@
 const spicedPg = require("spiced-pg");
 const db = spicedPg(`postgres:postgres:postgres@localhost:5432/social_db`);
 
+exports.addSelection = (selection, citationId, userId) => {
+    return db.query(
+        `INSERT INTO selections (selection, citation_id, user_id)
+            VALUES ($1, $2, $3) RETURNING *`,
+        [selection, citationId, userId]
+    );
+};
+
+// exports.findAuthorInfo = (citationId)
+//     return db.query(
+//         `SELECT users.first, users.last, citations.citation, citations.created_at
+//             FROM users
+//             LEFT JOIN citations
+//             ON users.id=citations.user_id RETURNING users.first, users.last`,
+//         [citationId]
+//     );
+// };
+
 exports.addCitation = (citation, author, source, userId) => {
     return db.query(
         `INSERT INTO citations (citation, author, source, user_id)
-            VALUES ($1, $2, $3, $4)`,
+            VALUES ($1, $2, $3, $4) RETURNING *`,
         [citation, author, source, userId]
     );
 };

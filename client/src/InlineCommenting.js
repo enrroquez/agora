@@ -4,11 +4,40 @@ export default function inlineCommenting() {
     const [citationInProgress, setCitation] = useState("");
     const [authorInProgress, setAuthor] = useState("");
     const [sourceInProgress, setSource] = useState("");
-    const [captureIsVisible, setCapture] = useState("");
+    const [commentReceived, setComment] = useState("");
+    const [capturingIsVisible, setCapturing] = useState("true");
+    const [selectingIsVisible, setSelecting] = useState("");
+    const [commentingIsVisible, setCommenting] = useState("");
 
-    function getCitation() {
-        let capturedCitation = window.getSelection().toString();
-        console.log(`Citation captured: `, capturedCitation);
+    function sendCommentToServer() {
+        console.log("I am in sendCommentToServer function!!!");
+        console.log("and comment captured is: ", commentReceived);
+    }
+
+    function getSelection() {
+        let capturedSelection = window.getSelection().toString();
+        if (capturedSelection) {
+            console.log(`Selection captured: `, capturedSelection);
+            fetch(`/saveSelection`, {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                body: JSON.stringify({
+                    capturedSelection,
+                }),
+            })
+                .then((res) => res.json())
+                .then((response) => {
+                    console.log("response from server: ", response);
+                    setCommenting(response.success);
+                    console.log("commentingIsVisible: ", commentingIsVisible);
+                    setSelecting(false);
+                })
+                .catch((err) => {
+                    console.log("error sending data to server: ", err);
+                });
+        }
     }
 
     function sendCitationToServer() {
@@ -24,9 +53,12 @@ export default function inlineCommenting() {
             }),
         })
             .then((res) => res.json())
-            .then(({ success }) => {
-                setCapture(success);
-                console.log("captureIsVisible: ", captureIsVisible);
+            .then((response) => {
+                console.log("success: ", response.success);
+                setCapturing(false); // setCapturing(response.success);
+                console.log("capturingIsVisible: ", capturingIsVisible);
+                setSelecting(response.success);
+                // selectingIsVisible;
             })
             .catch((err) => {
                 console.log("error sending data to server: ", err);
@@ -35,9 +67,25 @@ export default function inlineCommenting() {
 
     return (
         <section>
-            <h1>Enter a text to analyse</h1>
+            <h1>Let's analyse arguments together!</h1>
             <br />
-            {!captureIsVisible && ( //conditional rendering of a form, it becomes not visible after capturing
+            {capturingIsVisible && (
+                <>
+                    <h3>1 - Add a citation.</h3>
+                </>
+            )}
+            {selectingIsVisible && (
+                <>
+                    <h3>2 - Select a piece.</h3>
+                </>
+            )}
+            {commentingIsVisible && (
+                <>
+                    <h3>3 - Add a comment.</h3>
+                </>
+            )}
+            <br />
+            {capturingIsVisible && (
                 <>
                     <form id="capture">
                         <input
@@ -62,12 +110,26 @@ export default function inlineCommenting() {
             <br />
             <div className="citation-container">
                 <div className="citation">
-                    <p onMouseUp={getCitation}>"{citationInProgress}"</p>
+                    <p onMouseUp={getSelection}>"{citationInProgress}"</p>
                     <p className="author">{authorInProgress}</p>
                     <p className="source">{sourceInProgress}</p>
                 </div>
             </div>
             <br />
+            <br />
+            {commentingIsVisible && (
+                <>
+                    <form id="comment">
+                        <input
+                            placeholder="Comment"
+                            onChange={(e) => setComment(e.target.value)}
+                        />
+                        <button type="button" onClick={sendCommentToServer}>
+                            Post
+                        </button>
+                    </form>
+                </>
+            )}
         </section>
     );
 }
