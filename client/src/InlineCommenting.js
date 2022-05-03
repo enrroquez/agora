@@ -1,36 +1,5 @@
 import { useState } from "react";
-
-///////////////////////////////////////
-import { io } from "socket.io-client";
-
-const socket = io.connect();
-
-socket.on("greeting", (data) => {
-    console.log("data: ", data);
-});
-
-socket.on("user-click-inform", (userClick) => {
-    console.log("userClick: ", userClick);
-});
-
-socket.on("exceptMe", (data) => {
-    console.log("data: ", data);
-});
-
-socket.on("private", (data) => {
-    console.log("data: ", data);
-});
-
-socket.on("bob", (data) => {
-    console.log("data: ", data);
-});
-
-socket.emit("thanks", [
-    "hey there mr server",
-    "thats so nice of you",
-    "im so happy to be here",
-]);
-/////////////////////////////////////////
+import { socket } from "./socket.js";
 
 export default function inlineCommenting() {
     const [citationInProgress, setCitation] = useState("");
@@ -49,7 +18,7 @@ export default function inlineCommenting() {
     function getSelection() {
         let capturedSelection = window.getSelection().toString();
         if (capturedSelection) {
-            console.log(`Selection captured: `, capturedSelection);
+            console.log(`capturedSelection: `, capturedSelection);
             fetch(`/saveSelection`, {
                 method: "POST",
                 headers: {
@@ -90,7 +59,7 @@ export default function inlineCommenting() {
                 setCapturing(false); // setCapturing(response.success);
                 console.log("capturingIsVisible: ", capturingIsVisible);
                 setSelecting(response.success);
-                // selectingIsVisible;
+                console.log("citationInProgress is set: ", citationInProgress);
             })
             .catch((err) => {
                 console.log("error sending data to server: ", err);
@@ -156,6 +125,25 @@ export default function inlineCommenting() {
                             placeholder="Comment"
                             onChange={(e) => setComment(e.target.value)}
                         />
+                        <button
+                            type="button"
+                            onClick={() =>
+                                socket.emit("user-click", {
+                                    info: [
+                                        "thanks",
+                                        "the user just clicked the button",
+                                    ],
+                                })
+                            }
+                        >
+                            Post
+                        </button>
+                    </form>
+                    {/* <form id="comment">
+                        <input
+                            placeholder="Comment"
+                            onChange={(e) => setComment(e.target.value)}
+                        />
                         <button type="button" onClick={sendCommentToServer}>
                             Post
                         </button>
@@ -171,7 +159,7 @@ export default function inlineCommenting() {
                         }
                     >
                         Click me for a nice socket message
-                    </button>
+                    </button> */}
                 </>
             )}
         </section>

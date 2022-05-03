@@ -36,68 +36,29 @@ const io = require("socket.io")(server, {
         callback(null, req.headers.referer.startsWith("http://localhost:3000")),
 });
 
-let onlineUsers = [];
-
-io.use(function (socket, next) {
-    cookieSession(socket.request, socket.request.res, next);
-});
-
-io.on("connection", (socket) => {
-    console.log(`New connection established with user ${socket.id}`);
-    onlineUsers.push(socket.id);
-    console.log("onlineUsers: ", onlineUsers);
-    console.log("socket.request.session: ", socket.request.session);
-    console.log(
-        "socket.request.session.userId;: ",
-        socket.request.session.userId
-    );
-
-    socket.emit("greeting", {
-        message: "Hello from the server",
-    });
-
-    socket.on("thanks", (data) => {
-        console.log("data: ", data);
-    });
-
-    socket.on("user-click", (data) => {
-        console.log("data: ", data);
-        io.emit(
-            "user-click-inform",
-            "HEY EVERYONE SOMEONE JUST CLICKED THE BUTTON"
-        );
-        socket.broadcast.emit("exceptMe", "Hey OTHER PEOPLE");
-        io.to(onlineUsers[0]).emit("private", {
-            message: "this is such a private message",
-        });
-    });
-
-    socket.on("disconnect", () => {
-        console.log(`User ${socket.id} just disconnected 😱`);
-        onlineUsers.filter((user) => user !== socket.id);
-        console.log("onlineUsers after disconnect: ", onlineUsers);
-    });
-});
-///////////////////////////////////////
-
 app.use(compression());
 app.use(express.json());
 
 let sessionSecret = require("../secrets.json").SESSION_SECRET;
 
-app.use(
-    cookieSession({
-        secret: sessionSecret,
-        maxAge: 1000 * 60 * 60 * 24 * 14,
-        sameSite: true,
-    })
-);
-
 app.use(express.static(path.join(__dirname, "..", "client", "public")));
+///////////////////////////////////////////////////
+const cookieSessionMiddleware = cookieSession({
+    secret: sessionSecret,
+    maxAge: 1000 * 60 * 60 * 24 * 14,
+    sameSite: true,
+});
+
+app.use(cookieSessionMiddleware);
+
+io.use(function (socket, next) {
+    cookieSessionMiddleware(socket.request, socket.request.res, next);
+});
+//////////////////////////////////////////////////
 
 app.post(`/saveSelection`, (req, res) => {
     console.log("req.body: ", req.body);
-    console.log("req.session.userId:", req.session.userId);
+    // console.log("req.session.userId:", req.session.userId);
     const { capturedSelection } = req.body;
     db.addSelection(
         capturedSelection,
@@ -124,7 +85,7 @@ app.post(`/saveSelection`, (req, res) => {
 
 app.post(`/saveCitation`, (req, res) => {
     console.log("req.body: ", req.body);
-    console.log("req.session.userId:", req.session.userId);
+    // console.log("req.session.userId:", req.session.userId);
     const { citationInProgress, authorInProgress, sourceInProgress } = req.body;
     db.addCitation(
         citationInProgress,
@@ -139,7 +100,11 @@ app.post(`/saveCitation`, (req, res) => {
                 rows[0]
             );
             req.session.citationId = rows[0].id;
-            res.json({ success: true, citationId: rows[0].id });
+            res.json({
+                success: true,
+                citationId: rows[0].id,
+                userId: req.session.userId,
+            });
         })
         .catch((err) => {
             console.log("error adding citation in DB: ", err);
@@ -391,4 +356,49 @@ app.get("*", function (req, res) {
 
 server.listen(process.env.PORT || 3001, function () {
     console.log("I'm listening.");
+});
+
+let onlineUsers = [];
+
+io.on("connection", async (socket) => {
+    console.log(`New connection established with user ${socket.id}`);
+    // console.log("req.session.userId: ", req.session.userId);
+
+    onlineUsers.push(socket.id);
+    console.log("onlineUsers: ", onlineUsers);
+    console.log("socket.request.session: ", socket.request.session);
+    console.log(
+        "socket.request.session.userId;: ",
+        socket.request.session.userId
+    );
+
+    socket.emit("greeting", {
+        message: "Hello from the server",
+    });
+
+    socket.on("thanks", (data) => {
+        console.log("data: ", data);
+    });
+
+    socket.on("user-click", (data) => {
+        console.log("data: ", data);
+        io.emit(
+            "user-click-inform",
+            "HEY EVERYONE SOMEONE JUST CLICKED THE BUTTON"
+        );
+        socket.broadcast.emit("exceptMe", "Hey OTHER PEOPLE");
+        io.to(onlineUsers[0]).emit("private", {
+            message: "this is such a private message",
+        });
+    });
+
+    socket.on("disconnect", () => {
+        console.log(`User ${socket.id} just disconnected`);
+        // onlineUsers.filter((user) => user !== socket.id);
+        let index = onlineUsers.indexOf(socket.id);
+        if (index > -1) {
+            onlineUsers.splice(index, 1);
+        }
+        console.log("offlineUser removed: ", onlineUsers);
+    });
 });

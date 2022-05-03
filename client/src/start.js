@@ -13,7 +13,7 @@ fetch("/user/id.json")
             ReactDOM.render(<Welcome />, document.querySelector("main"));
         } else {
             // this means the user is logged in cause their browser DID have a cookie
-            init();
+            init(); //websockets
             ReactDOM.render(
                 <>
                     <App />
