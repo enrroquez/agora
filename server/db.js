@@ -19,6 +19,24 @@ exports.addSelection = (selection, citationId, userId) => {
 //     );
 // };
 
+exports.getPreviousComments = () => {
+    return db.query(
+        `SELECT id, sender_id, first, last, image_url, comment 
+            FROM comments
+            JOIN users
+            ON comments.sender_id = users.id 
+            ORDER BY comments.id;`
+    );
+};
+
+exports.addComment = (myId, commentText) => {
+    return db.query(
+        `INSERT INTO comments (id, comment)
+        VALUES ($1, $2) RETURNING id`,
+        [myId, commentText]
+    );
+};
+
 exports.addCitation = (citation, author, source, userId) => {
     return db.query(
         `INSERT INTO citations (citation, author, source, user_id)

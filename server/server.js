@@ -362,8 +362,6 @@ let onlineUsers = [];
 
 io.on("connection", async (socket) => {
     console.log(`New connection established with user ${socket.id}`);
-    // console.log("req.session.userId: ", req.session.userId);
-
     onlineUsers.push(socket.id);
     console.log("onlineUsers: ", onlineUsers);
     console.log("socket.request.session: ", socket.request.session);

@@ -7,6 +7,7 @@ import FindPeople from "./FindPeople";
 import OtherProfile from "./OtherProfile";
 import { Link } from "react-router-dom";
 import InlineCommenting from "./InlineCommenting";
+import InlineCommenting2 from "./InlineCommenting_ver2";
 
 export default class App extends React.Component {
     constructor() {
@@ -95,8 +96,8 @@ export default class App extends React.Component {
                                 Home
                             </Link>
                             <> </>
-                            <Link className="textToButton" to="/users">
-                                Find some friends
+                            <Link className="textToButton" to="/commenting">
+                                Text analisys
                             </Link>
                             <> </>
                             <button onClick={() => logout()}>Logout</button>
@@ -126,6 +127,9 @@ export default class App extends React.Component {
                     </Route>
                     <Route exact path="/commenting">
                         <InlineCommenting />
+                    </Route>
+                    <Route exact path="/commenting2">
+                        <InlineCommenting2 />
                     </Route>
                     <div className="inFooter">
                         <h3>

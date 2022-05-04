@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { socket } from "./socket.js";
 
-export default function inlineCommenting() {
+export default function inlineCommenting2() {
     const [citationInProgress, setCitation] = useState("");
     const [authorInProgress, setAuthor] = useState("");
     const [sourceInProgress, setSource] = useState("");
@@ -9,7 +9,9 @@ export default function inlineCommenting() {
     const [capturingIsVisible, setCapturing] = useState("true");
     const [selectingIsVisible, setSelecting] = useState("");
     const [commentingIsVisible, setCommenting] = useState("");
-    const [highlightedCitation, setHightlight] = useState("");
+    const [citationFirstPart, setFirstPart] = useState("");
+    const [capturedSelection, setCapturedSelection] = useState("");
+    const [citationThirdPart, setThirdPart] = useState("");
 
     function sendCommentToServer() {
         console.log(
@@ -20,25 +22,20 @@ export default function inlineCommenting() {
 
     const highlightSelection = async (selection) => {
         let citation = citationInProgress;
+        console.log("citation: ", citation);
         console.log(`selection: `, selection);
         console.log(`selection lenght: `, selection.length);
         let newTagPos = citationInProgress.indexOf(selection);
-        setHightlight(
-            [
-                citation.slice(0, newTagPos),
-                `<strong>`,
-                selection,
-                `</strong>`,
-                citation.slice(newTagPos + selection.length),
-            ].join("")
-        );
-        console.log("highlightedCitation: ", highlightedCitation);
+        setFirstPart(citation.slice(0, newTagPos));
+        console.log("citationFirstPart: ", citationFirstPart);
+        setThirdPart(citation.slice(newTagPos + selection.length));
+        console.log("citationThirdPart: ", citationThirdPart);
     };
 
     function getAndSaveSelection() {
-        let capturedSelection = window.getSelection().toString();
+        setCapturedSelection(window.getSelection().toString());
+        console.log("capturedSelection: ", capturedSelection);
         if (capturedSelection) {
-            console.log(`capturedSelection: `, capturedSelection);
             fetch(`/saveSelection`, {
                 method: "POST",
                 headers: {
@@ -143,16 +140,17 @@ export default function inlineCommenting() {
 
             <div className="citation-container">
                 <div className="citation">
-                    {highlightedCitation && <p>{highlightedCitation}</p>}
-                    {/* {highlightedCitation && (
-                        <p
-                            dangerouslySetInnerHTML={{
-                                _html: highlightedCitation,
-                            }}
-                        />
-                    )} */}
-                    <p className="author">{authorInProgress}</p>
-                    <p className="source">{sourceInProgress}</p>
+                    <>
+                        <p>
+                            {citationFirstPart && { citationFirstPart }}
+                            {capturedSelection && (
+                                <strong>{capturedSelection}</strong>
+                            )}
+                            {citationThirdPart && { citationThirdPart }}
+                        </p>
+                        <p className="author">{authorInProgress}</p>
+                        <p className="source">{sourceInProgress}</p>
+                    </>
                 </div>
             </div>
 
