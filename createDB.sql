@@ -52,6 +52,7 @@ CREATE TABLE comments(
   sender_id INTEGER NOT NULL REFERENCES users(id),
   --group_id INTEGER NOT NULL REFERENCES group(id), --pending implementation
   comment VARCHAR(500) NOT NULL,
+  citation_id INTEGER NOT NULL REFERENCES citations(id),
   created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 

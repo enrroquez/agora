@@ -9,6 +9,7 @@ export default function ListCitations() {
         fetch(`/getCitations`)
             .then((res) => res.json())
             .then((data) => {
+                console.log("data fetched from server: ", data);
                 setListCitations(data);
                 console.log("data fetched from server: ", citations);
             })
@@ -26,18 +27,33 @@ export default function ListCitations() {
             <h1>List of all texts brought to collective analysis</h1>
             {citations.map((citation) => (
                 <div key={citation.id}>
-                    <p className="small">
-                        Author:{citation.author}
-                        <br />
-                        Text: {citation.citation}
-                        <br />
-                        Source: <a href={citation.source}>{citation.source}</a>
-                        <br />
-                        Publisher: {citation.first} {citation.last}
-                        <br />
-                        <Link to={`/show-citation/${citation.id}`}>
-                            Join the discussion
-                        </Link>
+                    <p className="citations-list">
+                        <div>
+                            Published by:
+                            <br />
+                            <br />
+                            <img src={citation.image_url} height="100px" />
+                            <br />
+                            {citation.first} {citation.last}
+                        </div>
+                        <div>
+                            <>
+                                <em>
+                                    <b>{citation.citation}</b>
+                                </em>
+                            </>
+                            <br />
+                            <br />
+                            Author: {citation.author}
+                            <br />
+                            Source:{" "}
+                            <a href={citation.source}>{citation.source}</a>
+                            <br />
+                            <br />
+                            <Link to={`/show-citation/${citation.id}`}>
+                                Join the discussion
+                            </Link>
+                        </div>
                     </p>
                     <br />
                 </div>

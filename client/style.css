@@ -107,6 +107,13 @@ body {
     margin: 20px;
 }
 
-.small {
+.citations-list {
     font-size: smaller;
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    align-items: center;
+    border-radius: 25px;
+    border: 2px solid #73ad21;
+    background-color: white;
+    padding: 20px;
 }
