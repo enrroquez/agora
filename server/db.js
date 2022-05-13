@@ -19,21 +19,42 @@ exports.addSelection = (selection, citationId, userId) => {
 //     );
 // };
 
-exports.getPreviousComments = () => {
+exports.getOneCitation = (citationId) => {
     return db.query(
-        `SELECT id, sender_id, first, last, image_url, comment 
-            FROM comments
+        `SELECT citations.id, citation, author, source, first, last, image_url
+            FROM citations
             JOIN users
-            ON comments.sender_id = users.id 
-            ORDER BY comments.id;`
+            ON citations.user_id = users.id 
+            WHERE citations.id=$1;`,
+        [citationId]
     );
 };
 
-exports.addComment = (myId, commentText) => {
+exports.getPreviousCitations = () => {
     return db.query(
-        `INSERT INTO comments (id, comment)
-        VALUES ($1, $2) RETURNING id`,
-        [myId, commentText]
+        `SELECT citations.id, citation, author, source, first, last, image_url
+            FROM citations
+            JOIN users
+            ON citations.user_id = users.id 
+            ORDER BY citations.id;`
+    );
+};
+
+// exports.getPreviousComments = () => {
+//     return db.query(
+//         `SELECT id, sender_id, first, last, image_url, comment
+//             FROM comments
+//             JOIN users
+//             ON comments.sender_id = users.id
+//             ORDER BY comments.id;`
+//     );
+// };
+
+exports.addComment = (comment, sender_Id, citation_Id) => {
+    return db.query(
+        `INSERT INTO comments (comment, sender_Id, citation_Id )
+        VALUES ($1, $2, $3) RETURNING id`,
+        [comment, sender_Id, citation_Id]
     );
 };
 

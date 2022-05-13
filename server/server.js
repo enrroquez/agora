@@ -56,6 +56,32 @@ io.use(function (socket, next) {
 });
 //////////////////////////////////////////////////
 
+app.get(`/citation/:id`, function (req, res) {
+    console.log("req.params.id: ", req.params.id);
+    db.getOneCitation(req.params.id)
+        .then(({ rows }) => {
+            console.log("rows from DB in getOneCitation Info: ", rows);
+            if (rows.lenght == 0) {
+                res.json({ citationDontExist: true });
+            } else {
+                res.json(rows[0]);
+            }
+        })
+        .catch((err) => {
+            console.log("error retriving user data from DB: ", err);
+        });
+});
+
+app.get(`/getCitations`, (req, res) => {
+    db.getPreviousCitations()
+        .then(({ rows }) => {
+            res.json(rows);
+        })
+        .catch((err) => {
+            console.log("some error finding mos recent members: ", err);
+        });
+});
+
 app.post(`/saveSelection`, (req, res) => {
     console.log("req.body: ", req.body);
     // console.log("req.session.userId:", req.session.userId);
@@ -380,14 +406,24 @@ io.on("connection", async (socket) => {
 
     socket.on("user-click", (data) => {
         console.log("data: ", data);
-        io.emit(
-            "user-click-inform",
-            "HEY EVERYONE SOMEONE JUST CLICKED THE BUTTON"
-        );
-        socket.broadcast.emit("exceptMe", "Hey OTHER PEOPLE");
-        io.to(onlineUsers[0]).emit("private", {
-            message: "this is such a private message",
-        });
+        console.log("socket.request.session: ", socket.request.session);
+        const { userId, citationId } = socket.request.session;
+        db.addComment(data.comment, userId, citationId)
+            .then(({ rows }) => {
+                io.emit(
+                    "user-click-inform",
+                    `Message sent to the chat: ${data.comment}`
+                );
+            })
+
+            .catch((err) => {
+                console.log("Error: ", err);
+            });
+
+        // socket.broadcast.emit("exceptMe", "Hey OTHER PEOPLE");
+        // io.to(onlineUsers[0]).emit("private", {
+        //     message: "this is such a private message",
+        // });
     });
 
     socket.on("disconnect", () => {

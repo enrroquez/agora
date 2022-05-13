@@ -7,7 +7,8 @@ import FindPeople from "./FindPeople";
 import OtherProfile from "./OtherProfile";
 import { Link } from "react-router-dom";
 import InlineCommenting from "./InlineCommenting";
-import InlineCommenting2 from "./InlineCommenting_ver2";
+import ListCitations from "./displayCitations";
+import ShowACitation from "./showACitation";
 
 export default class App extends React.Component {
     constructor() {
@@ -100,6 +101,10 @@ export default class App extends React.Component {
                                 Text analisys
                             </Link>
                             <> </>
+                            <Link className="textToButton" to="/citations-list">
+                                List previous analisys
+                            </Link>
+                            <> </>
                             <button onClick={() => logout()}>Logout</button>
                         </div>
                     </div>
@@ -125,11 +130,14 @@ export default class App extends React.Component {
                     <Route exact path="/user/:id">
                         <OtherProfile />
                     </Route>
+                    <Route exact path="/show-citation/:id">
+                        <ShowACitation />
+                    </Route>
                     <Route exact path="/commenting">
                         <InlineCommenting />
                     </Route>
-                    <Route exact path="/commenting2">
-                        <InlineCommenting2 />
+                    <Route exact path="/citations-list">
+                        <ListCitations />
                     </Route>
                     <div className="inFooter">
                         <h3>

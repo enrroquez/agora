@@ -10,6 +10,7 @@ export default function inlineCommenting() {
     const [selectingIsVisible, setSelecting] = useState("");
     const [commentingIsVisible, setCommenting] = useState("");
     const [highlightedCitation, setHightlight] = useState("");
+    const [selectionIsDone, setDoneSelecting] = useState(false);
 
     function sendCommentToServer() {
         console.log(
@@ -26,9 +27,9 @@ export default function inlineCommenting() {
         setHightlight(
             [
                 citation.slice(0, newTagPos),
-                `<strong>`,
+                `<mark>`,
                 selection,
-                `</strong>`,
+                `</mark>`,
                 citation.slice(newTagPos + selection.length),
             ].join("")
         );
@@ -52,6 +53,7 @@ export default function inlineCommenting() {
                 .then((response) => {
                     console.log("response from server: ", response);
                     highlightSelection(capturedSelection);
+                    setDoneSelecting(true);
                     setCommenting(response.success);
                     console.log("commentingIsVisible: ", commentingIsVisible);
                     setSelecting(false);
@@ -130,32 +132,37 @@ export default function inlineCommenting() {
             )}
             <br />
             <br />
-            <div className="citation-container">
-                <div className="citation">
-                    <p onMouseUp={getAndSaveSelection}>
-                        "{citationInProgress}"
-                    </p>
-                    <p className="author">{authorInProgress}</p>
-                    <p className="source">{sourceInProgress}</p>
-                </div>
-            </div>
-            <br />
-
-            <div className="citation-container">
-                <div className="citation">
-                    {highlightedCitation && <p>{highlightedCitation}</p>}
-                    {/* {highlightedCitation && (
-                        <p
-                            dangerouslySetInnerHTML={{
-                                _html: highlightedCitation,
-                            }}
-                        />
-                    )} */}
-                    <p className="author">{authorInProgress}</p>
-                    <p className="source">{sourceInProgress}</p>
-                </div>
-            </div>
-
+            {!selectionIsDone && (
+                <>
+                    <div className="citation-container">
+                        <div className="citation">
+                            <p onMouseUp={getAndSaveSelection}>
+                                "{citationInProgress}"
+                            </p>
+                            <p className="author">{authorInProgress}</p>
+                            <p className="source">{sourceInProgress}</p>
+                        </div>
+                    </div>
+                    <br />
+                </>
+            )}
+            {selectionIsDone && (
+                <>
+                    <div className="citation-container">
+                        <div className="citation">
+                            {highlightedCitation && (
+                                <p
+                                    dangerouslySetInnerHTML={{
+                                        __html: highlightedCitation,
+                                    }}
+                                />
+                            )}
+                            <p className="author">{authorInProgress}</p>
+                            <p className="source">{sourceInProgress}</p>
+                        </div>
+                    </div>
+                </>
+            )}
             <br />
             {commentingIsVisible && (
                 <>
@@ -168,10 +175,7 @@ export default function inlineCommenting() {
                             type="button"
                             onClick={() =>
                                 socket.emit("user-click", {
-                                    info: [
-                                        "thanks",
-                                        "the user just clicked the button",
-                                    ],
+                                    comment: commentReceived,
                                 })
                             }
                         >
