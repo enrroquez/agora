@@ -3,15 +3,14 @@ import { Link } from "react-router-dom";
 
 export default function ListCitations() {
     const [citations, setListCitations] = useState([]);
-    // const { id, citation, author, source, first, last, image_url } = citations;
 
     useEffect(() => {
         fetch(`/getCitations`)
             .then((res) => res.json())
             .then((data) => {
-                console.log("data fetched from server: ", data);
+                console.log("data fetched from server: ", data); //<<<<<<<<<<<<<<<
                 setListCitations(data);
-                console.log("data fetched from server: ", citations);
+                console.log("data fetched from server: ", citations); //<<<<<<<<<<<<<
             })
             .catch((err) => {
                 console.log("error retrieving data from server: ", err);
@@ -35,6 +34,8 @@ export default function ListCitations() {
                             <img src={citation.image_url} height="100px" />
                             <br />
                             {citation.first} {citation.last}
+                            <br />
+                            on {citation.to_char}
                         </div>
                         <div>
                             <>

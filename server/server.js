@@ -82,6 +82,8 @@ app.get(`/getCitations`, (req, res) => {
         });
 });
 
+// app.post(`/updateCitation`)<<<<<<<<<<<<<<<<
+
 app.post(`/saveSelection`, (req, res) => {
     console.log("req.body: ", req.body);
     // console.log("req.session.userId:", req.session.userId);

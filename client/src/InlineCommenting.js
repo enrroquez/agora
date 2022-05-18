@@ -6,34 +6,28 @@ export default function inlineCommenting() {
     const [authorInProgress, setAuthor] = useState("");
     const [sourceInProgress, setSource] = useState("");
     const [commentReceived, setComment] = useState("");
-    const [capturingIsVisible, setCapturing] = useState("true");
+    const [capturingIsVisible, setCapturing] = useState(true);
     const [selectingIsVisible, setSelecting] = useState("");
     const [commentingIsVisible, setCommenting] = useState("");
     const [highlightedCitation, setHightlight] = useState("");
     const [selectionIsDone, setDoneSelecting] = useState(false);
-
-    function sendCommentToServer() {
-        console.log(
-            "I am in sendCommentToServer function which still does nothing!!!"
-        );
-        console.log("and comment captured is: ", commentReceived);
-    }
+    let citationWithSelectionHtml = "";
+    let citationID = "";
 
     const highlightSelection = async (selection) => {
         let citation = citationInProgress;
         console.log(`selection: `, selection);
         console.log(`selection lenght: `, selection.length);
         let newTagPos = citationInProgress.indexOf(selection);
-        setHightlight(
-            [
-                citation.slice(0, newTagPos),
-                `<mark>`,
-                selection,
-                `</mark>`,
-                citation.slice(newTagPos + selection.length),
-            ].join("")
-        );
-        console.log("highlightedCitation: ", highlightedCitation);
+        citationWithSelectionHtml = [
+            citation.slice(0, newTagPos),
+            `<mark>`,
+            selection,
+            `</mark>`,
+            citation.slice(newTagPos + selection.length),
+        ].join("");
+        setHightlight(citationWithSelectionHtml);
+        // sendUpdatedCitationToServer();
     };
 
     function getAndSaveSelection() {
@@ -52,6 +46,8 @@ export default function inlineCommenting() {
                 .then((res) => res.json())
                 .then((response) => {
                     console.log("response from server: ", response);
+                    citationID = response.citationId;
+                    console.log("citationID from server: ", citationID);
                     highlightSelection(capturedSelection);
                     setDoneSelecting(true);
                     setCommenting(response.success);
@@ -64,7 +60,29 @@ export default function inlineCommenting() {
         }
     }
 
+    function sendUpdatedCitationToServer() {
+        console.log("citationWithSelectionHtml: ", citationWithSelectionHtml);
+        fetch(`/updateCitation`, {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({
+                citationWithSelectionHtml,
+            }),
+        })
+            .then((res) => res.json())
+            .then((response) => {
+                console.log(
+                    "citationWithSelectionHtml in DB, response: ",
+                    response
+                );
+            })
+            .catch((err) => {
+                console.log("error sending updated data to server: ", err);
+            });
+    }
+
     function sendCitationToServer() {
+        console.log("citationInProgress state: ", citationInProgress);
         fetch(`/saveCitation`, {
             method: "POST",
             headers: {
@@ -78,7 +96,8 @@ export default function inlineCommenting() {
         })
             .then((res) => res.json())
             .then((response) => {
-                console.log("success: ", response.success);
+                console.log("response from server on saveCitation: ", response);
+                citationID = response.citationId;
                 setCapturing(false);
                 console.log("capturingIsVisible: ", capturingIsVisible);
                 setSelecting(response.success);
@@ -137,6 +156,7 @@ export default function inlineCommenting() {
                     <div className="citation-container">
                         <div className="citation">
                             <p onMouseUp={getAndSaveSelection}>
+                                {/************************************ insert a second function that calls another fetch that updates citation??? *************************/}
                                 "{citationInProgress}"
                             </p>
                             <p className="author">{authorInProgress}</p>

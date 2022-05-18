@@ -32,7 +32,7 @@ exports.getOneCitation = (citationId) => {
 
 exports.getPreviousCitations = () => {
     return db.query(
-        `SELECT citations.id, citation, author, source, first, last, image_url
+        `SELECT citations.id, citation, author, source, first, last, image_url, TO_CHAR(citations.created_at, 'FMDay, FMDD FMMonth FMYY')
             FROM citations
             JOIN users
             ON citations.user_id = users.id 
